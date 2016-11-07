@@ -31,12 +31,13 @@ Unit::Unit(const std::string& name, Course direction, int posY)
 
 	frametime = std::stoi(s_frametime);
 
+
 	sheets[Stance::ATTACKING] = Sheet(name+"/attack",std::stoi(s_attack));
 	sheets[Stance::MOVING] = Sheet(name+"/move",std::stoi(s_move));
 	sheets[Stance::DIEING] = Sheet(name+"/death",std::stoi(s_death));
 	sheets[Stance::STANDING] = Sheet(name+"/stand",std::stoi(s_stand));
 
-	std::string s_maxhealth,s_damage,s_velocity;
+	std::string s_maxhealth,s_damage,s_velocity,s_range;
 
 	file.close();
 
@@ -45,13 +46,14 @@ Unit::Unit(const std::string& name, Course direction, int posY)
 	if(!file.good())
 		Log("No stats Unit File "+name+"\n");
 
-	ReadRowFromCSV(file, s_maxhealth,s_damage,s_velocity); //1st row - headers
-	ReadRowFromCSV(file, s_maxhealth,s_damage,s_velocity); //data
+	ReadRowFromCSV(file, s_maxhealth,s_damage,s_velocity,s_range); //1st row - headers
+	ReadRowFromCSV(file, s_maxhealth,s_damage,s_velocity,s_range); //data
 
 	maxhealth = std::stoi(s_maxhealth);
 	health = maxhealth;
 	damage = std::stoi(s_damage);
 	velocity = std::stof(s_velocity);
+	range = std::stoi(s_range);
 
 	SwitchStance(Stance::MOVING);
 
@@ -63,6 +65,8 @@ Unit::Unit(const std::string& name, Course direction, int posY)
 	{
 		sprite.setPosition(sf::Vector2f(resources->GetVariable("rightstartpos"),posY));
 	}
+
+	destination = GetPosition();
 }
 
 Unit::~Unit()
@@ -122,7 +126,41 @@ void Unit::Update(float delta_time)
 		else
 			temp.x -=velocity * delta_time;
 
+		if(temp.y != destination.y)
+		{
+			if(temp.y - destination.y > 0) // we go up
+			{
+				if(temp.y - velocity * delta_time - destination.y <= 0)
+					temp.y = destination.y;
+				else
+					temp.y -= velocity * delta_time;
+			}
+			else
+			{
+				if(temp.y + velocity * delta_time - destination.y >= 0)
+					temp.y = destination.y;
+				else
+					temp.y += velocity * delta_time;
+			}
 
+			if(temp.x - destination.x > 0)
+			{
+				if(temp.x - destination.x <= range)
+					StartAttacking();
+				else
+					StopAttacking();
+			}
+			else
+			{
+				if(destination.x - temp.x <= range){
+					StartAttacking();
+					std::cout << destination.x <<" " << temp.x <<" "<< destination.x - temp.x  <<"\n";
+				}
+				else
+					StopAttacking();
+			}
+
+		}
 		sprite.setPosition(temp);
 	}
 }
@@ -135,6 +173,11 @@ void Unit::Render(sf::RenderTarget& window)
 void Unit::SetPosition(float x,float y)
 {
 	sprite.setPosition(sf::Vector2f(x,y));
+}
+
+void Unit::MoveTo(sf::Vector2f destination)
+{
+	this->destination = destination;
 }
 
 void Unit::ApplyDamage(int damage)

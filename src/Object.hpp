@@ -88,6 +88,8 @@ class Object
 		virtual void SetPosition(float x, float y);
 		void Move(float x, float y);
 
+		void MoveTo(sf::Vector2f destination);
+
 		void SetSprite(const std::string& name);
 
 		float velocity = 0;

@@ -3,7 +3,9 @@
 class Unit : public Object
 {
 		int health, maxhealth;
-		int damage;
+		int damage, range;
+
+		sf::Vector2f destination;
 
 		//sf::Sprite sprite;
 	public:
@@ -19,6 +21,8 @@ class Unit : public Object
 
 		void ApplyDamage(int damage);
 		void ShowDamage();
+
+		void MoveTo(sf::Vector2f destination);
 
 		void StartAttacking()
 		{

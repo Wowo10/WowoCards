@@ -1,2 +1,2 @@
-maxhealth;damage;velocity
-10;3;100
+maxhealth;damage;velocity;range
+10;3;50;15

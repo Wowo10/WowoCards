@@ -132,23 +132,34 @@ void GameplayState::Update(float time_step)
 
 		CheckCollisions(deltatime);
 
+		float minimal = 100000;
+		Unit* ptr = nullptr;
 		for(auto it = units.begin(); it != units.end();)
 		{
 			(*it)->Update(deltatime);
 
-
 			if(!(*it)->attacking && (*it)->stance != Stance::DIEING)
+			{
+
+
 				for(auto jt = units.begin(); jt != units.end(); ++jt)
 				{
-                    if((*jt)->course != (*it)->course)
+					if((*jt)->course != (*it)->course)
 					{
 						if((*jt)->stance != Stance::DIEING && !(*jt)->attacking)
 						{
-							std::cout << "Found!\n";
+							float dist = CountSqDistance((*it)->GetPosition(),(*jt)->GetPosition());
+							if(dist < minimal)
+							{
+								ptr = (*jt);
+								minimal = dist;
+							}
 						}
 					}
 				}
-
+				if(ptr != nullptr)
+					(*it)->MoveTo(ptr->GetPosition());
+			}
 			if( (*it)->todelete)
 			{
 				delete (*it);
