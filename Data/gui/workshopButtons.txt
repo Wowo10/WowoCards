@@ -1,0 +1,30 @@
+Button.up1 {
+    NormalImage     : "up_1.png" ;
+    HoverImage      : "up_1_nasterowany.png" ;
+    DownImage       : "up_1_wcisniety.png" ;
+}
+Button.up2 {
+    NormalImage     : "up_2.png" ;
+    HoverImage      : "up_2_nasterowany.png" ;
+    DownImage       : "up_2_wcisniety.png" ;
+}
+Button.up3 {
+    NormalImage     : "up_3.png" ;
+    HoverImage      : "up_3_nasterowany.png" ;
+    DownImage       : "up_3_wcisniety.png" ;
+}
+Button.down1 {
+    NormalImage     : "down_1.png" ;
+    HoverImage      : "down_1_nasterowany.png" ;
+    DownImage       : "down_1_wcisniety.png" ;
+}
+Button.down2 {
+    NormalImage     : "down_2.png" ;
+    HoverImage      : "down_2_nasterowany.png" ;
+    DownImage       : "down_2_wcisniety.png" ;
+}
+Button.down3 {
+    NormalImage     : "down_3.png" ;
+    HoverImage      : "down_3_nasterowany.png" ;
+    DownImage       : "down_3_wcisniety.png" ;
+}

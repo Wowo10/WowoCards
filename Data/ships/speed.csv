@@ -1,0 +1,12 @@
+part_name;type;level;weight;speed;agility;endurance
+speed_body_0;0;0;100;200;150;100
+speed_hamster_0;1;0;20;25;50;0
+speed_hamster_1;1;1;30;30;60;0
+speed_pig_0;1;0;40;60;30;20
+speed_pig_1;1;1;50;70;40;20
+speed_rabbit_0;1;0;30;50;35;10
+speed_rabbit_1;1;1;40;60;40;10
+speed_rat_0;1;0;30;30;50;0
+speed_rat_1;1;1;40;40;60;0
+speed_rocket1_0;2;0;20;-5;-10;0
+speed_rocket2_0;2;0;20;-5;-10;0

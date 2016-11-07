@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="octoberjam" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="debug_octoberjam" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="octoberjam" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-std=c++14" />
+			<Add option="-m64" />
+			<Add option="-DSFML_STATIC" />
+		</Compiler>
+		<Linker>
+			<Add option="-m64" />
+			<Add library="tgui-s" />
+			<Add library="sfml-graphics-s" />
+			<Add library="sfml-window-s" />
+			<Add library="sfml-audio-s" />
+			<Add library="sfml-system-s" />
+			<Add library="mingw32" />
+			<Add library="user32" />
+			<Add library="gdi32" />
+			<Add library="winmm" />
+			<Add library="dxguid" />
+			<Add library="opengl32" />
+			<Add library="jpeg" />
+			<Add library="freetype" />
+			<Add library="openal32" />
+			<Add library="FLAC" />
+			<Add library="vorbisenc" />
+			<Add library="vorbisfile" />
+			<Add library="vorbis" />
+			<Add library="ogg" />
+		</Linker>
+		<Unit filename="src/Button.cpp" />
+		<Unit filename="src/Button.hpp" />
+		<Unit filename="src/Camera.hpp" />
+		<Unit filename="src/Collision.cpp" />
+		<Unit filename="src/Collision.hpp" />
+		<Unit filename="src/FPSCounter.cpp" />
+		<Unit filename="src/FPSCounter.hpp" />
+		<Unit filename="src/GameEngine.cpp" />
+		<Unit filename="src/GameEngine.hpp" />
+		<Unit filename="src/GameTimer.hpp" />
+		<Unit filename="src/Object.cpp" />
+		<Unit filename="src/Object.hpp" />
+		<Unit filename="src/Obstacle.hpp" />
+		<Unit filename="src/Options.cpp" />
+		<Unit filename="src/Options.hpp" />
+		<Unit filename="src/OptionsState.cpp" />
+		<Unit filename="src/Plane.cpp" />
+		<Unit filename="src/Plane.hpp" />
+		<Unit filename="src/Player.cpp" />
+		<Unit filename="src/Player.hpp" />
+		<Unit filename="src/PlayerControl.cpp" />
+		<Unit filename="src/PlayerControl.hpp" />
+		<Unit filename="src/Powerup.hpp" />
+		<Unit filename="src/RealTimer.hpp" />
+		<Unit filename="src/ResourceManager.cpp" />
+		<Unit filename="src/ResourceManager.hpp" />
+		<Unit filename="src/States/CreditsState.cpp" />
+		<Unit filename="src/States/CreditsState.hpp" />
+		<Unit filename="src/States/GameState.hpp" />
+		<Unit filename="src/States/GameplayState.cpp" />
+		<Unit filename="src/States/GameplayState.hpp" />
+		<Unit filename="src/States/MainMenuState.cpp" />
+		<Unit filename="src/States/MainMenuState.hpp" />
+		<Unit filename="src/States/OptionsState.cpp" />
+		<Unit filename="src/States/OptionsState.hpp" />
+		<Unit filename="src/Unit.cpp" />
+		<Unit filename="src/Unit.hpp" />
+		<Unit filename="src/Utils/FileUtils.cpp" />
+		<Unit filename="src/Utils/FileUtils.hpp" />
+		<Unit filename="src/Utils/InstancedSprite.cpp" />
+		<Unit filename="src/Utils/InstancedSprite.hpp" />
+		<Unit filename="src/Utils/Log.cpp" />
+		<Unit filename="src/Utils/Log.hpp" />
+		<Unit filename="src/Utils/PolarVector.cpp" />
+		<Unit filename="src/Utils/PolarVector.hpp" />
+		<Unit filename="src/main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -27,3 +27,15 @@
 *.exe
 *.out
 *.app
+
+# Custom
+obj/
+*.exe
+*.layout
+*.depend
+*.save-failed
+User/log.txt
+cmake_modules/
+CMakeLists.txt
+.idea/
+.directory

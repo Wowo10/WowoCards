@@ -1,0 +1,35 @@
+Button.MainMenu {
+    NormalImage     : "basic_menu_button.png" ;
+    HoverImage      : "hooverd_menu_button.png" ;
+    DownImage       : "clicked_menu_button.png" ;
+    TextColorNormal : rgba(227, 229, 49, 255);
+    TextColorHover : rgba(183, 180, 51, 255);
+    TextColorDown : rgba(239, 86, 38, 255);
+}
+Button.Background {
+	NormalImage     : "alpha_151.png" ;
+    HoverImage      : "alpha_151.png" ;
+    DownImage       : "alpha_151.png" ;
+}
+TextBox {
+    BackgroundColor : rgba(210, 210, 210, 0);
+    TextColor : rgba(227, 229, 49, 255);
+    SelectedTextColor : rgba(183, 180, 51, 255);
+    SelectedTextBackgroundColor : rgba(210, 210, 210, 0);
+    CaretColor : (145, 180, 190);
+    BorderColor : (255, 255, 255);
+    Borders : (0, 0, 0, 0);
+}
+Slider {
+	TrackImage : "track.png" ;
+    ThumbImage : "thumb.png" ;
+}
+
+ListBox {
+    BackgroundColor : rgba(210, 210, 210, 0);
+    TextColor : rgba(227, 229, 49, 255);
+    SelectedBackgroundColor : rgba(0, 0, 0, 100);
+    SelectedTextColor : rgba(183, 180, 51, 255);
+    BorderColor : rgba(183, 180, 51, 200);
+    Borders : (2, 2, 2, 2);
+}
