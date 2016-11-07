@@ -18,11 +18,12 @@ GameplayState::GameplayState(GameEngine* game)
 
 	plane->AddDestruction("shatteredearth", sf::Vector2f(engine->window.getSize().x/4,engine->window.getSize().y/2),2000);
 
-	units.push_back(new Unit("zombie",Course::LEFT,300)); //testings
-	units.push_back(new Unit("zombie",Course::RIGHT,100));
+	std::uniform_int_distribution<> randomY(
+		(engine->window.getSize().y/2-(resources->GetVariable("planebreadth")/2) * 1.2),
+		(engine->window.getSize().y/2+(resources->GetVariable("planebreadth")/2) * 0.8));
 
-	MAP_SIZE_X = resources->GetVariable("map_size_x");
-	MAP_SIZE_Y = resources->GetVariable("map_size_y");
+	units.push_back(new Unit("zombie",Course::LEFT,randomY(engine->gen))); //testings
+	units.push_back(new Unit("zombie",Course::RIGHT,randomY(engine->gen)));
 
 	srand(time(NULL));
 
@@ -93,6 +94,8 @@ GameplayState::GameplayState(GameEngine* game)
 	/*AddPlayer(PlayerType::SHIP, ControlType::BOT);
 	AddPlayer(PlayerType::SHIP, ControlType::BOT);
 	AddPlayer(PlayerType::SHIP, ControlType::BOT);*/
+
+	units[0]->SwitchStance(Stance::DIEING);
 }
 
 GameplayState::~GameplayState()
@@ -134,17 +137,15 @@ void GameplayState::Update(float time_step)
 			(*it)->Update(deltatime);
 
 
-			if(!(*it)->attacking)
+			if(!(*it)->attacking && (*it)->stance != Stance::DIEING)
 				for(auto jt = units.begin(); jt != units.end(); ++jt)
 				{
-					if(jt == it)
-						continue;
-
-					if(!(*jt)->attacking &&
-							CountSqDistance((*it)->GetPosition(),(*jt)->GetPosition()) >
-							resources->GetVariable("aggressiondistance"))
+                    if((*jt)->course != (*it)->course)
 					{
-						//aggressive moves
+						if((*jt)->stance != Stance::DIEING && !(*jt)->attacking)
+						{
+							std::cout << "Found!\n";
+						}
 					}
 				}
 
@@ -196,6 +197,9 @@ void GameplayState::HandleEvents(sf::Event& event)
 	else
 		showgui = false;
 
+	std::uniform_int_distribution<> randomY(
+		(plane->GetStartY() + plane->width * 0.1 ),
+		(plane->GetEndY()));
 
 	for(auto& it : players)
 	{
@@ -221,6 +225,22 @@ void GameplayState::HandleEvents(sf::Event& event)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 		for(auto& it : units)
 			it->ApplyDamage(1);
+
+	//Debugging positions
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::M))
+		std::cout<<"Mouse pos: "<<sf::Mouse::getPosition(engine->window).x<<" "<<sf::Mouse::getPosition(engine->window).y<<"\n";
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+		if(randomY(engine->gen)%2 == 0)
+		{
+			int x = randomY(engine->gen);
+			units.push_back(new Unit("zombie",Course::LEFT,x));
+		}
+		else
+		{
+			int x = randomY(engine->gen);
+			units.push_back(new Unit("zombie",Course::RIGHT,x));
+		}
 
 	//camera
 	if(event.type == sf::Event::MouseWheelMoved)

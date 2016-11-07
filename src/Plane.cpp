@@ -99,3 +99,13 @@ void Plane::Draw(sf::RenderTarget& window)
 		for(auto& it : grid)
 			window.draw(it);
 }
+
+float Plane::GetStartY()
+{
+	return background.getPosition().y;
+}
+
+float Plane::GetEndY()
+{
+	return GetStartY()+width;
+}

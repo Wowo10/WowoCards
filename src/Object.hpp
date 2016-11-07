@@ -9,22 +9,49 @@
 #include "FPSCounter.hpp"
 #include "GameTimer.hpp"
 #include "ResourceManager.hpp"
-
-
-
-extern int MAP_SIZE_X;
-extern int MAP_SIZE_Y;
+#include "Utils/FileUtils.hpp"
 
 enum class ObjectType
 {
-	PLAYER,
-	POWERUP,
+	PLAYER = 0,
+	BULLET,
 	OBSTACLE,
-	SPAWNPOINT,
+	BUILDING,
 	BUTTON,
 	UNIT
 };
 
+enum Course
+{
+	LEFT = 0,
+	RIGHT
+};
+
+enum Stance
+{
+	MOVING = 0,
+	STANDING,
+	ATTACKING,
+	DIEING
+};
+
+struct Sheet
+{
+	sf::Sprite spritesheet;
+	sf::Vector2f rect;
+	int maxframes;
+	Sheet(const std::string& path, int framescount)
+	{
+		spritesheet.setTexture(*resources->GetTexture(path));
+		maxframes = framescount;
+		rect.x = (int)spritesheet.getGlobalBounds().width/framescount;
+		rect.y = spritesheet.getGlobalBounds().height;
+	}
+	Sheet()
+	{
+
+	}
+};
 
 class Object
 {
@@ -32,9 +59,26 @@ class Object
 		Object(ObjectType objtype, std::string name, int owner_id = -1);
 		Object(ObjectType objtype);
 		Object(ObjectType objtype, std::string graphic, sf::Vector2f pos);
+		Object(ObjectType objtype, std::string path, Course direction);
+
 		virtual ~Object();
 
 		ObjectType type;
+
+		std::string name;
+
+		//Rendering
+		std::map<Stance, Sheet> sheets;
+
+		Stance stance;
+		Course course;
+		GameTimer animationtimer;
+
+		int currentframe;
+		int frametime;
+
+		void ActiveSheet();
+		void SwitchStance(Stance stance);
 
 		sf::Sprite sprite;
 
@@ -43,14 +87,12 @@ class Object
 		sf::Vector2f GetPosition();
 		virtual void SetPosition(float x, float y);
 		void Move(float x, float y);
-		virtual void SetDirection(float value);
 
 		void SetSprite(const std::string& name);
 
 		float velocity = 0;
-		float direction = 0;
 
-	virtual void Update(float delta_time);
+		virtual void Update(float delta_time);
 		virtual void Render(sf::RenderTarget& window);
 
 

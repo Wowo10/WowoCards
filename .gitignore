@@ -39,3 +39,4 @@ cmake_modules/
 CMakeLists.txt
 .idea/
 .directory
+*Thumbs.db

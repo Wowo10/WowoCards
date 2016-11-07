@@ -60,26 +60,10 @@ void Player::CheckInput()
 	control.CheckInput();
 }
 
-void Player::UpdateMovement()
-{
-	if(direction > 180.0f)
-		direction -= 360.0f;
-	else if(direction < -180.0f)
-		direction += 360.0f;
-
-	float move_x = cos(PI/180.0f*direction)*velocity;
-	float move_y = sin(PI/180.0f*direction)*velocity;
-
-	///
-	Move(move_x, move_y);
-	sprite.setRotation(direction);
-}
-
 void Player::Update(float delta_time)
 {
 	if(alive)
 	{
-		UpdateMovement();
 
 		/*
 		particlesystem.setPosition(sprite.getPosition());
@@ -106,24 +90,6 @@ void Player::SetPosition(float x, float y)
 	sf::Vector2f pos(x, y);
 	sprite.setPosition(x, y);
 }
-
-void Player::SetDirection(float value)
-{
-	direction = value;
-	sprite.setRotation(direction);
-}
-
-int Player::GetID()
-{
-	return id;
-}
-
-
-void Player::Enable(bool value)
-{
-	alive = value;
-}
-
 
 void Player::Spawn(sf::Vector2f pos)
 {

@@ -1,2 +1,2 @@
-velocity;frametime;fattack;fdeath;fmove;fstand
-100;100;4;6;4;4
+frametime;fattack;fdeath;fmove;fstand
+100;4;6;4;4
