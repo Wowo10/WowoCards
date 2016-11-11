@@ -4,8 +4,14 @@ class Unit : public Object
 {
 		int health, maxhealth;
 		int damage, range;
+		float attackdealey;
+		bool attacked = false;
 
-		sf::Vector2f destination;
+		sf::Text TID;
+
+		GameTimer attacktimer;
+
+		Unit* target = nullptr;
 
 		//sf::Sprite sprite;
 	public:
@@ -13,6 +19,9 @@ class Unit : public Object
 		~Unit();
 
 		bool attacking;
+
+		static int ID;
+		int id;
 
 		void Update(float frame_time); //override;
 		void Render(sf::RenderTarget& window) override;
@@ -22,7 +31,12 @@ class Unit : public Object
 		void ApplyDamage(int damage);
 		void ShowDamage();
 
-		void MoveTo(sf::Vector2f destination);
+		bool IsDieing();
+
+		bool HasTarget();
+		void SetTarget(Unit* unit);
+
+		void ActiveSheet() override;
 
 		void StartAttacking()
 		{
@@ -33,6 +47,6 @@ class Unit : public Object
 		void StopAttacking()
 		{
 			attacking = false;
-			SwitchStance(Stance::MOVING);
+			SwitchStance(Stance::STANDING);
 		}
 };

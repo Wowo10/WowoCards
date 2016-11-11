@@ -60,6 +60,8 @@ void Object::ActiveSheet()
 
 void Object::SwitchStance(Stance stance)
 {
+//	std::cout << "Stance: "<<static_cast<int>(stance) <<"\n";
+
 	this->stance = stance;
 
 	ActiveSheet();

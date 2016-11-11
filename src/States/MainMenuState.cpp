@@ -140,7 +140,7 @@ void MainMenuState::Render()
 
 	target = &engine->window;
 	target->draw(background);
-	target->draw(logo_sprite);
+	//target->draw(logo_sprite);
 	gui.draw();
 	for(int j = 0; j < buttons.size(); j++)
 	{

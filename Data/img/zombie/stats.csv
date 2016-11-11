@@ -1,2 +1,2 @@
-maxhealth;damage;velocity;range
-10;3;50;15
+maxhealth;damage;velocity;range;attackdealey
+10;3;40;35;30

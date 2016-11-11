@@ -77,7 +77,7 @@ class Object
 		int currentframe;
 		int frametime;
 
-		void ActiveSheet();
+		virtual void ActiveSheet();
 		void SwitchStance(Stance stance);
 
 		sf::Sprite sprite;

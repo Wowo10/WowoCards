@@ -94,8 +94,6 @@ GameplayState::GameplayState(GameEngine* game)
 	/*AddPlayer(PlayerType::SHIP, ControlType::BOT);
 	AddPlayer(PlayerType::SHIP, ControlType::BOT);
 	AddPlayer(PlayerType::SHIP, ControlType::BOT);*/
-
-	units[0]->SwitchStance(Stance::DIEING);
 }
 
 GameplayState::~GameplayState()
@@ -132,34 +130,45 @@ void GameplayState::Update(float time_step)
 
 		CheckCollisions(deltatime);
 
-		float minimal = 100000;
+		float minimal = 999999;
 		Unit* ptr = nullptr;
 		for(auto it = units.begin(); it != units.end();)
 		{
 			(*it)->Update(deltatime);
 
-			if(!(*it)->attacking && (*it)->stance != Stance::DIEING)
+			if(!(*it)->HasTarget() && (*it)->stance != Stance::DIEING)
 			{
-
-
+				//std::cout <<"We have no target and not dieing\n";
 				for(auto jt = units.begin(); jt != units.end(); ++jt)
 				{
-					if((*jt)->course != (*it)->course)
+					if((*it)->course != (*jt)->course)
 					{
-						if((*jt)->stance != Stance::DIEING && !(*jt)->attacking)
+						//std::cout << "Courses mismatch " << (*it)->id << " " << (*jt)->id << "\n";
+						if(!(*jt)->HasTarget() && (*jt)->stance != Stance::DIEING)
 						{
-							float dist = CountSqDistance((*it)->GetPosition(),(*jt)->GetPosition());
-							if(dist < minimal)
+							//std::cout << "Other ha no targer and is not dieing\n";
+							if((*it)->course == Course::RIGHT && (*it)->GetPosition().x > (*jt)->GetPosition().x
+									|| (*it)->course == Course::LEFT && (*it)->GetPosition().x < (*jt)->GetPosition().x)
 							{
-								ptr = (*jt);
-								minimal = dist;
+								//std::cout << "Target behind us!\n";
+								//std::cout << "Target found! me: " << (*it)->id << " target: " << (*jt)->id<<"\n";
+								float dist = (*it)->GetPosition().x - (*jt)->GetPosition().x ;
+								if(dist < 0)
+									dist *=-1;
+								if(dist < minimal)
+								{
+									ptr = (*jt);
+									minimal = dist;
+								}
+
 							}
 						}
 					}
 				}
 				if(ptr != nullptr)
-					(*it)->MoveTo(ptr->GetPosition());
+					(*it)->SetTarget(ptr);
 			}
+
 			if( (*it)->todelete)
 			{
 				delete (*it);
@@ -167,6 +176,9 @@ void GameplayState::Update(float time_step)
 			}
 			else
 				++it;
+
+			minimal = 999999;
+			ptr = nullptr;
 		}
 	}
 
@@ -241,17 +253,18 @@ void GameplayState::HandleEvents(sf::Event& event)
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::M))
 		std::cout<<"Mouse pos: "<<sf::Mouse::getPosition(engine->window).x<<" "<<sf::Mouse::getPosition(engine->window).y<<"\n";
 
+	int x = randomY(engine->gen);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 		if(randomY(engine->gen)%2 == 0)
-		{
-			int x = randomY(engine->gen);
 			units.push_back(new Unit("zombie",Course::LEFT,x));
-		}
 		else
-		{
-			int x = randomY(engine->gen);
 			units.push_back(new Unit("zombie",Course::RIGHT,x));
-		}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+		units.push_back(new Unit("zombie",Course::LEFT,x));
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		units.push_back(new Unit("zombie",Course::RIGHT,x));
+
 
 	//camera
 	if(event.type == sf::Event::MouseWheelMoved)
@@ -294,7 +307,7 @@ void GameplayState::Render()
 	RenderMapToActiveView();
 
 	engine->window.setView(engine->window.getDefaultView());
-	if(showgui)
+	/*if(showgui)
 	{
 		for(auto& it : guielements)
 			engine->window.draw(it);
@@ -306,7 +319,7 @@ void GameplayState::Render()
 	if (showendgui)
 	{
 		end_gui.draw();
-	}
+	}*/
 
 	for(auto& it : units)
 		it->Render(engine->window);

@@ -1,5 +1,7 @@
 #include "Unit.hpp"
 
+int Unit::ID = 0;
+
 Unit::Unit(const std::string& name, Course direction, int posY)
 	: Object(ObjectType::UNIT, name,direction)
 {
@@ -37,7 +39,7 @@ Unit::Unit(const std::string& name, Course direction, int posY)
 	sheets[Stance::DIEING] = Sheet(name+"/death",std::stoi(s_death));
 	sheets[Stance::STANDING] = Sheet(name+"/stand",std::stoi(s_stand));
 
-	std::string s_maxhealth,s_damage,s_velocity,s_range;
+	std::string s_maxhealth,s_damage,s_velocity,s_range,s_attackdealey;
 
 	file.close();
 
@@ -46,14 +48,15 @@ Unit::Unit(const std::string& name, Course direction, int posY)
 	if(!file.good())
 		Log("No stats Unit File "+name+"\n");
 
-	ReadRowFromCSV(file, s_maxhealth,s_damage,s_velocity,s_range); //1st row - headers
-	ReadRowFromCSV(file, s_maxhealth,s_damage,s_velocity,s_range); //data
+	ReadRowFromCSV(file, s_maxhealth,s_damage,s_velocity,s_range,s_attackdealey); //1st row - headers
+	ReadRowFromCSV(file, s_maxhealth,s_damage,s_velocity,s_range,s_attackdealey); //data
 
 	maxhealth = std::stoi(s_maxhealth);
 	health = maxhealth;
 	damage = std::stoi(s_damage);
 	velocity = std::stof(s_velocity);
 	range = std::stoi(s_range);
+	attackdealey = std::stof(s_attackdealey);
 
 	SwitchStance(Stance::MOVING);
 
@@ -66,53 +69,18 @@ Unit::Unit(const std::string& name, Course direction, int posY)
 		sprite.setPosition(sf::Vector2f(resources->GetVariable("rightstartpos"),posY));
 	}
 
-	destination = GetPosition();
+	id = ID++;
+
+	TID.setFont(resources->font);
+	TID.setPosition(GetPosition());
+	TID.setCharacterSize(12);
+	TID.setString(to_string(id));
 }
 
 Unit::~Unit()
 {
 
 }
-
-/*
-void Unit::SwitchStance(Stance stance)
-{
-	std::cout << "Switching stance!\n";
-	this->stance = stance;
-	ActiveSheet();
-	currentframe = 0;
-}
-
-void Unit::ActiveSheet()
-{
-	std::cout << static_cast<int>(stance) <<" Activating sheet!\n";
-	switch(stance)
-	{
-		case (Stance::MOVING):
-			activesheet = &moves;
-			break;
-		case (Stance::ATTACKING):
-			activesheet = &attacks;
-			break;
-		case (Stance::STANDING):
-			activesheet = &stands;
-			break;
-		case (Stance::DIEING):
-			activesheet = &deaths;
-			break;
-	}
-
-	sf::Vector2f temp = sprite.getPosition();
-	sprite = activesheet->spritesheet;
-	sprite.setPosition(temp);
-	sprite.setTextureRect(sf::IntRect(activesheet->rect.x * currentframe,0,
-									  activesheet->rect.x,activesheet->rect.y));
-
-	if(course == Course::RIGHT)
-		sprite.setScale(-1.0,1.0);
-
-}
-*/
 
 void Unit::Update(float delta_time)
 {
@@ -121,53 +89,89 @@ void Unit::Update(float delta_time)
 	if(stance == Stance::MOVING)
 	{
 		sf::Vector2f temp = sprite.getPosition();
-		if(course == Course::LEFT)
-			temp.x +=velocity * delta_time;
-		else
-			temp.x -=velocity * delta_time;
 
-		if(temp.y != destination.y)
+		if(target == nullptr)
 		{
-			if(temp.y - destination.y > 0) // we go up
+			if(course == Course::LEFT)
+				temp.x +=velocity * delta_time;
+			else
+				temp.x -=velocity * delta_time;
+		}
+		else
+		{
+			float distanceX = target->GetPosition().x - GetPosition().x;
+			if(distanceX < 0)
+				distanceX *=-1;
+
+			float distanceY = target->GetPosition().y - GetPosition().y;
+
+			if(distanceX > range)
 			{
-				if(temp.y - velocity * delta_time - destination.y <= 0)
-					temp.y = destination.y;
+				if(course == Course::LEFT)
+					temp.x +=velocity * delta_time;
+				else
+					temp.x -=velocity * delta_time;
+			}
+			else if(distanceY == 0)
+				SwitchStance(Stance::ATTACKING);
+
+			if(distanceY < 0)
+				if(distanceY >= -1)
+					temp.y = target->GetPosition().y;
 				else
 					temp.y -= velocity * delta_time;
-			}
+			else if(distanceY <= 1)
+				temp.y = target->GetPosition().y;
 			else
-			{
-				if(temp.y + velocity * delta_time - destination.y >= 0)
-					temp.y = destination.y;
-				else
-					temp.y += velocity * delta_time;
-			}
-
-			if(temp.x - destination.x > 0)
-			{
-				if(temp.x - destination.x <= range)
-					StartAttacking();
-				else
-					StopAttacking();
-			}
-			else
-			{
-				if(destination.x - temp.x <= range){
-					StartAttacking();
-					std::cout << destination.x <<" " << temp.x <<" "<< destination.x - temp.x  <<"\n";
-				}
-				else
-					StopAttacking();
-			}
-
+				temp.y += velocity * delta_time;
 		}
 		sprite.setPosition(temp);
 	}
+	else if(stance == Stance::ATTACKING)
+	{
+		if(currentframe == sheets[stance].maxframes/2 && !attacked)
+		{
+			target->ApplyDamage(damage);
+			attacked = true;
+		}
+		if(currentframe == sheets[stance].maxframes -1)
+		{
+			attacked = false;
+
+			attacktimer.AddDelta(attackdealey);
+			SwitchStance(Stance::STANDING);
+		}
+	}
+	else if(stance == Stance::STANDING)
+	{
+		if(true)//stuns etc (todo)
+		{
+			if(attacktimer.Passed())
+				SwitchStance(Stance::ATTACKING);
+			if(target == nullptr)
+				SwitchStance(Stance::MOVING);
+		}
+	}
+
+	if(target!= nullptr && target->IsDieing())
+	{
+		target = nullptr;
+		SwitchStance(Stance::MOVING);
+	}
+
+	TID.setPosition(GetPosition());
 }
 
 void Unit::Render(sf::RenderTarget& window)
 {
 	window.draw(sprite);
+	window.draw(TID);
+}
+
+void Unit::ActiveSheet()
+{
+	Object::ActiveSheet();
+	ShowDamage();
 }
 
 void Unit::SetPosition(float x,float y)
@@ -175,9 +179,20 @@ void Unit::SetPosition(float x,float y)
 	sprite.setPosition(sf::Vector2f(x,y));
 }
 
-void Unit::MoveTo(sf::Vector2f destination)
+bool Unit::IsDieing()
 {
-	this->destination = destination;
+	return stance==Stance::DIEING;
+}
+
+bool Unit::HasTarget()
+{
+	return target != nullptr;
+}
+
+void Unit::SetTarget(Unit* unit)
+{
+	target = unit;
+	unit->target = this;
 }
 
 void Unit::ApplyDamage(int damage)
