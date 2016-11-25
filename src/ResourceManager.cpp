@@ -27,7 +27,7 @@ sf::Texture* ResourceManager::LoadTexture(const std::string& name, TextureType t
 {
 	sf::Texture* texture = new sf::Texture();
 
-	std::string filename = "Data/img/"+name+".png";
+	std::string filename = "Data/"+name+".png";
 
 	if(type == TextureType::SPRITE)
 	{

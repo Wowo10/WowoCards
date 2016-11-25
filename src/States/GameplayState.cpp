@@ -11,12 +11,12 @@ GameplayState::GameplayState(GameEngine* game)
 
 	//testing Destructions - template of use
 	sf::Sprite dest;
-	dest.setTexture( *resources->GetTexture("shatteredearth"));
+	dest.setTexture( *resources->GetTexture("img/shatteredearth"));
 	dest.setPosition(engine->window.getSize().x/2,engine->window.getSize().y/2);
 	dest.setOrigin(dest.getGlobalBounds().width/2,dest.getGlobalBounds().height/2);
 	plane->AddDestruction(new Destruction(dest,2000));
 
-	plane->AddDestruction("shatteredearth", sf::Vector2f(engine->window.getSize().x/4,engine->window.getSize().y/2),2000);
+	plane->AddDestruction("img/shatteredearth", sf::Vector2f(engine->window.getSize().x/4,engine->window.getSize().y/2),2000);
 
 	std::uniform_int_distribution<> randomY(
 		(engine->window.getSize().y/2-(resources->GetVariable("planebreadth")/2) * 1.2),
@@ -87,9 +87,9 @@ GameplayState::GameplayState(GameEngine* game)
 	deaths_display->setText("Deaths: 0");// + std::to_string(players[0]->deaths));
 	gui.add(deaths_display,"deaths_display");
 
-	Player* ptr = AddPlayer(PlayerType::SHIP, ControlType::MANUAL);
-	ptr->control.SetKeys(sf::Keyboard::A, sf::Keyboard::D, sf::Keyboard::Space);
-	ptr->control.SetActiveJoystick(0);
+//	Player* ptr = AddPlayer(PlayerType::SHIP, ControlType::MANUAL);
+//	ptr->control.SetKeys(sf::Keyboard::A, sf::Keyboard::D, sf::Keyboard::Space);
+//	ptr->control.SetActiveJoystick(0);
 
 	/*AddPlayer(PlayerType::SHIP, ControlType::BOT);
 	AddPlayer(PlayerType::SHIP, ControlType::BOT);
@@ -183,8 +183,8 @@ void GameplayState::Update(float time_step)
 		gui.get<tgui::ProgressBar>("main_player_healthbar")->setValue(players[0]->GetHP());
 
 		///Kills and Deaths
-		gui.get<tgui::Label>("kills_display")->setText("Kills: " + std::to_string(players[0]->kills));
-		gui.get<tgui::Label>("deaths_display")->setText("Deaths: " + std::to_string(players[0]->deaths));
+//		gui.get<tgui::Label>("kills_display")->setText("Kills: " + std::to_string(players[0]->kills));
+//		gui.get<tgui::Label>("deaths_display")->setText("Deaths: " + std::to_string(players[0]->deaths));
 	}
 
 	///Time Display
@@ -251,12 +251,12 @@ void GameplayState::HandleEvents(sf::Event& event)
 	int x = randomY(engine->gen);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 		if(randomY(engine->gen)%2 == 0)
-			units.push_back(new Unit("zombie",Course::LEFT,x));
+			units.push_back(new Unit("fighter",Course::LEFT,x));
 		else
-			units.push_back(new Unit("zombie",Course::RIGHT,x));
+			units.push_back(new Unit("mage",Course::RIGHT,x));
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-		units.push_back(new Unit("zombie",Course::LEFT,x));
+		units.push_back(new Unit("fighter",Course::LEFT,x));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		units.push_back(new Unit("zombie",Course::RIGHT,x));
 
@@ -356,7 +356,7 @@ void GameplayState::UpdateObjects(float gametime)
 		it->control.Update(&players);
 		it->Update(1.0);
 
-		if(it->GetHP()<=0 && it->alive)
+//		if(it->GetHP()<=0 && it->alive)
 		{
 			KillPlayer(it);
 			continue;
@@ -368,8 +368,8 @@ void GameplayState::CheckCollisions(float gametime)
 {
 	for(auto& it : players)
 	{
-		if( !it->alive)
-			continue;
+//		if( !it->alive)
+//			continue;
 
 		//check collisions with all objects
 		for(int j = 0; j < objects.size(); j++)
@@ -401,7 +401,7 @@ Player* GameplayState::AddPlayer(PlayerType type, ControlType controltype)
 
 void GameplayState::KillPlayer(Player* player)
 {
-	if (player->alive)
+//	if (player->alive)
 	{
 		sf::Sound* tmp_sound = new sf::Sound(sd_buffer);
 		tmp_sound->setPitch(1 - (rand()%10)*0.01);
@@ -413,7 +413,7 @@ void GameplayState::KillPlayer(Player* player)
 		camera.AddShakingEffect(1000);
 
 		player->Kill();
-		player->deathtimer.AddDelta(5000);
+//		player->deathtimer.AddDelta(5000);
 
 	}
 }

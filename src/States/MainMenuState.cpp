@@ -44,10 +44,10 @@ MainMenuState::MainMenuState(GameEngine* game)
 	main_layout->add(button_exit,"Exit");
 	main_layout->addSpace(0.15);
 
-	logo_sprite.setTexture(*resources->GetTexture("logo", TextureType::GUI));
+	logo_sprite.setTexture(*resources->GetTexture("img/logo", TextureType::GUI));
 	logo_sprite.setPosition(game->window.getSize().x/2-103, game->window.getSize().y/14 );
 
-	background.setTexture(*resources->GetTexture("background", TextureType::GUI));
+	background.setTexture(*resources->GetTexture("img/background", TextureType::GUI));
 	backgroundpos = sf::Vector2f(0, 0);
 	background.setPosition(backgroundpos);
 

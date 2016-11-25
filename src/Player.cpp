@@ -50,7 +50,7 @@ void Player::DecreaseHealth(float value)
 		{
 			hp = 0;
 
-			deaths++;
+//			deaths++;
 		}
 	}
 }
@@ -62,27 +62,24 @@ void Player::CheckInput()
 
 void Player::Update(float delta_time)
 {
-	if(alive)
-	{
 
 		/*
 		particlesystem.setPosition(sprite.getPosition());
 		particlesystem.update(fpscounter.TIME_STEP);
 		particlesystem.fuel(50);*/
-	}
+
 }
 
 void Player::Render(sf::RenderTarget& window)
 {
-	if(alive)
-	{
+
 		window.draw(sprite);
 
 		//window.draw(sprite);
 		//window.draw(ship.parts[PartLocation::BODY].sprite);
 
 		//window.draw(particlesystem);
-	}
+
 }
 
 void Player::SetPosition(float x, float y)
@@ -94,7 +91,6 @@ void Player::SetPosition(float x, float y)
 void Player::Spawn(sf::Vector2f pos)
 {
 	SetPosition(pos.x, pos.y);
-	alive = true;
 	SetHP(maxhp);
 
 	velocity = 0.0f;
@@ -109,12 +105,12 @@ void Player::Hit(Player* enemy)
 
 		if(enemy->GetHP() == 0)
 		{
-			kills++;
+//			kills++;
 		}
 	}
 }
 
 void Player::Kill()
 {
-	alive = false;
+
 }

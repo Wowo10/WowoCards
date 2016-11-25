@@ -16,9 +16,11 @@ now is still using for camera centering
 
 enum class PlayerType
 {
-	SHIP,
-	AIRCRAFT,
-	SUBMARINE
+	PIRATE = 0,
+	MLG,
+	POLYGON,
+	KNIGHT,
+	MAGE
 };
 
 class Player : public Object
@@ -27,13 +29,6 @@ class Player : public Object
 		PlayerType playertype;
 
 		PlayerControl control;
-
-		unsigned int kills = 0;
-		unsigned int deaths = 0;
-
-		float defaultvelocity;
-
-		GameTimer deathtimer;
 
 		Player(PlayerType typeplayer, int idparam, ControlType controltype);
 		~Player();
@@ -44,9 +39,6 @@ class Player : public Object
 		void Render(sf::RenderTarget& window) override;
 
 		void SetPosition(float x, float y) override;
-
-		bool alive = true;
-		bool can_shoot = true;
 
 		//ParticleSystem particlesystem;
 

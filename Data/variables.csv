@@ -16,7 +16,7 @@ camera_vertical_shift;300;vertical shift to center camera
 map_size_x;200000;
 map_size_y;4000;
 single_round_time;9999;
-planebreadth;200;
+planebreadth;250;
 gridwidth;3;
 columns;15;
 verses;3;

@@ -13,7 +13,7 @@ Unit::Unit(const std::string& name, Course direction, int posY)
 	std::string s_frametime,s_attack,s_death,s_move,s_stand;
 
 	std::fstream file;
-	file.open("Data/img/"+name+"/animation.csv", std::ios::in);
+	file.open("Data/units/"+name+"/animation.csv", std::ios::in);
 
 	if(!file.good())
 		Log("No animations Unit File "+name+"\n");
@@ -34,16 +34,16 @@ Unit::Unit(const std::string& name, Course direction, int posY)
 	frametime = std::stoi(s_frametime);
 
 
-	sheets[Stance::ATTACKING] = Sheet(name+"/attack",std::stoi(s_attack));
-	sheets[Stance::MOVING] = Sheet(name+"/move",std::stoi(s_move));
-	sheets[Stance::DIEING] = Sheet(name+"/death",std::stoi(s_death));
-	sheets[Stance::STANDING] = Sheet(name+"/stand",std::stoi(s_stand));
+	sheets[Stance::ATTACKING] = Sheet("units/"+name+"/attack",std::stoi(s_attack));
+	sheets[Stance::MOVING] = Sheet("units/"+name+"/move",std::stoi(s_move));
+	sheets[Stance::DIEING] = Sheet("units/"+name+"/death",std::stoi(s_death));
+	sheets[Stance::STANDING] = Sheet("units/"+name+"/stand",std::stoi(s_stand));
 
 	std::string s_maxhealth,s_damage,s_velocity,s_range,s_attackdealey;
 
 	file.close();
 
-	file.open("Data/img/"+name+"/stats.csv", std::ios::in);
+	file.open("Data/units/"+name+"/stats.csv", std::ios::in);
 
 	if(!file.good())
 		Log("No stats Unit File "+name+"\n");
@@ -146,10 +146,11 @@ void Unit::Update(float delta_time)
 	{
 		if(true)//stuns etc (todo)
 		{
-			if(attacktimer.Passed())
-				SwitchStance(Stance::ATTACKING);
 			if(target == nullptr)
 				SwitchStance(Stance::MOVING);
+			else if(attacktimer.Passed())
+				SwitchStance(Stance::ATTACKING);
+
 		}
 	}
 

@@ -105,7 +105,7 @@ OptionsState::OptionsState(GameEngine* game)
 	settingLayout->add(buttonChangeLanguage, "buttonChangeLanguage");
 
 
-	background.setTexture( *resources->GetTexture("background", TextureType::GUI));
+	background.setTexture( *resources->GetTexture("img/background", TextureType::GUI));
 	backgroundpos = sf::Vector2f(0, 0);
 	background.setPosition(backgroundpos);
 

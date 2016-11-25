@@ -5,7 +5,7 @@ CreditsState::CreditsState(GameEngine* game)
 {
 	mainTheme = std::make_shared<tgui::Theme>("Data/gui/mainMenuButton.txt");
 
-	background.setTexture( *resources->GetTexture("background", TextureType::GUI));
+	background.setTexture( *resources->GetTexture("img/background", TextureType::GUI));
 	backgroundpos = sf::Vector2f(0, 0);
 	background.setPosition(backgroundpos);
 
