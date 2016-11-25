@@ -153,7 +153,7 @@ void Unit::Update(float delta_time)
 		}
 	}
 
-	if(target!= nullptr && target->IsDieing())
+	if(target!= nullptr && target->IsDieing() && stance != Stance::DIEING)
 	{
 		target = nullptr;
 		SwitchStance(Stance::MOVING);
@@ -199,7 +199,7 @@ void Unit::ApplyDamage(int damage)
 {
 	if(stance != Stance::DIEING)
 	{
-		if(health - damage < 0)
+		if(health - damage <= 0)
 		{
 			health = 0;
 			SwitchStance(Stance::DIEING);

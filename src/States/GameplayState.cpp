@@ -138,20 +138,15 @@ void GameplayState::Update(float time_step)
 
 			if(!(*it)->HasTarget() && (*it)->stance != Stance::DIEING)
 			{
-				//std::cout <<"We have no target and not dieing\n";
 				for(auto jt = units.begin(); jt != units.end(); ++jt)
 				{
 					if((*it)->course != (*jt)->course)
 					{
-						//std::cout << "Courses mismatch " << (*it)->id << " " << (*jt)->id << "\n";
 						if(!(*jt)->HasTarget() && (*jt)->stance != Stance::DIEING)
 						{
-							//std::cout << "Other ha no targer and is not dieing\n";
 							if((*it)->course == Course::RIGHT && (*it)->GetPosition().x > (*jt)->GetPosition().x
 									|| (*it)->course == Course::LEFT && (*it)->GetPosition().x < (*jt)->GetPosition().x)
 							{
-								//std::cout << "Target behind us!\n";
-								//std::cout << "Target found! me: " << (*it)->id << " target: " << (*jt)->id<<"\n";
 								float dist = (*it)->GetPosition().x - (*jt)->GetPosition().x ;
 								if(dist < 0)
 									dist *=-1;
