@@ -17,7 +17,8 @@ struct Destruction
 
 class Plane
 {
-
+		bool text = true;
+		sf::Sprite* bgtext;
 		sf::Color color;
 		bool visiblegrid = true;
 		sf::RectangleShape background;
@@ -29,7 +30,7 @@ class Plane
 		Plane(sf::Color planecolor, sf::RenderTarget& window);
 		~Plane();
 
-				float width;
+		float width;
 
 		void SwitchGridView();
 		void AddDestruction(Destruction* destruction);

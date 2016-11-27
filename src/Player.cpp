@@ -1,7 +1,7 @@
 #include "Player.hpp"
 
-Player::Player(PlayerType typeplayer, int idparam, ControlType controltype)
-	: Object(ObjectType::PLAYER),
+Player::Player(PlayerType typeplayer, int idparam, ControlType controltype,const std::string& name, Course direction)
+	: UnitObject(name, direction, ObjectType::PLAYER),
 	  control(this, idparam, controltype)
 {
 	playertype = typeplayer;

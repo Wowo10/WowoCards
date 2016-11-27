@@ -12,6 +12,16 @@ Plane::Plane(sf::Color planecolor, sf::RenderTarget& window)
 
 	background.setPosition(0,window.getSize().y/2-(width/2));
 
+	if(text)
+	{
+		sf::Texture* temp = resources->GetTexture("img/grass");
+		temp->setRepeated(true);
+		bgtext = new sf::Sprite(*temp);
+		bgtext->setPosition(0,window.getSize().y/2-(width/2));
+		//bgtext.getTexture()->setRepeated(true);
+		bgtext->setTextureRect({ 0, 0, window.getSize().x, width});;
+	}
+
 	float gridwidth = resources->GetVariable("gridwidth");
 	float temp = window.getSize().x/(resources->GetVariable("columns") + 1);
 
@@ -91,6 +101,8 @@ void Plane::UpdateDestructions()
 void Plane::Draw(sf::RenderTarget& window)
 {
 	window.draw(background);
+
+	window.draw(*bgtext);
 
 	for(auto& it : destructions)
 		window.draw(it->sprite);

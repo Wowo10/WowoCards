@@ -1,9 +1,7 @@
 #include "Unit.hpp"
 
-int Unit::ID = 0;
-
 Unit::Unit(const std::string& name, Course direction, int posY)
-	: Object(ObjectType::UNIT, name,direction)
+	: UnitObject(name, direction, ObjectType::UNIT)
 {
 	//this->frametime = frametime;
 
@@ -32,7 +30,6 @@ Unit::Unit(const std::string& name, Course direction, int posY)
 		*/
 
 	frametime = std::stoi(s_frametime);
-
 
 	sheets[Stance::ATTACKING] = Sheet("units/"+name+"/attack",std::stoi(s_attack));
 	sheets[Stance::MOVING] = Sheet("units/"+name+"/move",std::stoi(s_move));
@@ -68,23 +65,16 @@ Unit::Unit(const std::string& name, Course direction, int posY)
 	{
 		sprite.setPosition(sf::Vector2f(resources->GetVariable("rightstartpos"),posY));
 	}
-
-	id = ID++;
-
-	TID.setFont(resources->font);
-	TID.setPosition(GetPosition());
-	TID.setCharacterSize(12);
-	TID.setString(to_string(id));
 }
 
 Unit::~Unit()
 {
-
+	target = nullptr;
 }
 
 void Unit::Update(float delta_time)
 {
-	Object::Update(delta_time);
+	UnitObject::Update(delta_time);
 	//moving
 	if(stance == Stance::MOVING)
 	{
@@ -129,7 +119,7 @@ void Unit::Update(float delta_time)
 	}
 	else if(stance == Stance::ATTACKING)
 	{
-		if(currentframe == sheets[stance].maxframes/2 && !attacked)
+		if(currentframe == sheets[stance].maxframes - 2 && !attacked)
 		{
 			target->ApplyDamage(damage);
 			attacked = true;
@@ -159,30 +149,18 @@ void Unit::Update(float delta_time)
 		target = nullptr;
 		SwitchStance(Stance::MOVING);
 	}
-
-	TID.setPosition(GetPosition());
 }
 
 void Unit::Render(sf::RenderTarget& window)
 {
 	window.draw(sprite);
-	window.draw(TID);
+	UnitObject::Render(window);
 }
 
 void Unit::ActiveSheet()
 {
-	Object::ActiveSheet();
+	UnitObject::ActiveSheet();
 	ShowDamage();
-}
-
-void Unit::SetPosition(float x,float y)
-{
-	sprite.setPosition(sf::Vector2f(x,y));
-}
-
-bool Unit::IsDieing()
-{
-	return stance==Stance::DIEING;
 }
 
 bool Unit::HasTarget()
@@ -194,27 +172,4 @@ void Unit::SetTarget(Unit* unit)
 {
 	target = unit;
 	unit->target = this;
-}
-
-void Unit::ApplyDamage(int damage)
-{
-	if(stance != Stance::DIEING)
-	{
-		if(health - damage <= 0)
-		{
-			health = 0;
-			SwitchStance(Stance::DIEING);
-		}
-		else
-			health -= damage;
-
-		ShowDamage();
-	}
-}
-
-void Unit::ShowDamage()
-{
-	float value = 255-(float)(maxhealth-health)/maxhealth*255;
-
-	sprite.setColor(sf::Color(255,value,value));
 }

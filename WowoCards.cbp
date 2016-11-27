@@ -93,6 +93,8 @@
 		<Unit filename="src/States/OptionsState.hpp" />
 		<Unit filename="src/Unit.cpp" />
 		<Unit filename="src/Unit.hpp" />
+		<Unit filename="src/UnitObject.cpp" />
+		<Unit filename="src/UnitObject.hpp" />
 		<Unit filename="src/Utils/FileUtils.cpp" />
 		<Unit filename="src/Utils/FileUtils.hpp" />
 		<Unit filename="src/Utils/InstancedSprite.cpp" />

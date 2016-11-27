@@ -144,8 +144,8 @@ void GameplayState::Update(float time_step)
 					{
 						if(!(*jt)->HasTarget() && (*jt)->stance != Stance::DIEING)
 						{
-							if((*it)->course == Course::RIGHT && (*it)->GetPosition().x > (*jt)->GetPosition().x
-									|| (*it)->course == Course::LEFT && (*it)->GetPosition().x < (*jt)->GetPosition().x)
+							if(((*it)->course == Course::RIGHT && (*it)->GetPosition().x > (*jt)->GetPosition().x)
+									|| ((*it)->course == Course::LEFT && (*it)->GetPosition().x < (*jt)->GetPosition().x))
 							{
 								float dist = (*it)->GetPosition().x - (*jt)->GetPosition().x ;
 								if(dist < 0)
@@ -249,16 +249,17 @@ void GameplayState::HandleEvents(sf::Event& event)
 		std::cout<<"Mouse pos: "<<sf::Mouse::getPosition(engine->window).x<<" "<<sf::Mouse::getPosition(engine->window).y<<"\n";
 
 	int x = randomY(engine->gen);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)){
 		if(randomY(engine->gen)%2 == 0)
 			units.push_back(new Unit("fighter",Course::LEFT,x));
 		else
 			units.push_back(new Unit("mage",Course::RIGHT,x));
+	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 		units.push_back(new Unit("fighter",Course::LEFT,x));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		units.push_back(new Unit("zombie",Course::RIGHT,x));
+		units.push_back(new Unit("stickman",Course::RIGHT,x));
 
 
 	//camera
@@ -391,10 +392,10 @@ void GameplayState::CheckCollisions(float gametime)
 
 Player* GameplayState::AddPlayer(PlayerType type, ControlType controltype)
 {
-	players.push_back(new Player(type, playerid, controltype));
-	players.back()->SetPosition(0.0f, 0.0f);
+///	players.push_back(new Player(type, playerid, controltype));
+//	players.back()->SetPosition(0.0f, 0.0f);
 
-	playerid++;
+//	playerid++;
 
 	return players.back();
 }

@@ -1,17 +1,14 @@
-#include "Object.hpp"
+#include "UnitObject.hpp"
 
-class Unit : public Object
+class Unit : public UnitObject
 {
-		int health, maxhealth;
 		int damage, range;
 		float attackdealey;
 		bool attacked = false;
 
-		sf::Text TID;
-
 		GameTimer attacktimer;
 
-		Unit* target = nullptr;
+		UnitObject* target = nullptr;
 
 		//sf::Sprite sprite;
 	public:
@@ -20,18 +17,15 @@ class Unit : public Object
 
 		bool attacking;
 
-		static int ID;
-		int id;
-
-		void Update(float frame_time); //override;
+		void Update(float frame_time) override;
 		void Render(sf::RenderTarget& window) override;
 
-		void SetPosition(float x, float y) override;
+		//void SetPosition(float x, float y) override;
 
-		void ApplyDamage(int damage);
-		void ShowDamage();
+		//void ApplyDamage(int damage);
+		//void ShowDamage();
 
-		bool IsDieing();
+		//bool IsDieing();
 
 		bool HasTarget();
 		void SetTarget(Unit* unit);

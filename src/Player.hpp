@@ -5,7 +5,7 @@
 #include <random>
 
 #include "Utils/Log.hpp"
-#include "Object.hpp"
+#include "UnitObject.hpp"
 #include "PlayerControl.hpp"
 
 
@@ -20,17 +20,23 @@ enum class PlayerType
 	MLG,
 	POLYGON,
 	KNIGHT,
-	MAGE
+	MAGE,
+	STICKMAN
 };
 
-class Player : public Object
+class Player : public UnitObject
 {
+	int maxmana,mana;
+	int cards = 0;
+	int draws = 5;
+
 	public:
 		PlayerType playertype;
 
 		PlayerControl control;
 
 		Player(PlayerType typeplayer, int idparam, ControlType controltype);
+		Player(PlayerType typeplayer, int idparam, ControlType controltype,const std::string& name, Course direction);
 		~Player();
 
 		void CheckInput();
