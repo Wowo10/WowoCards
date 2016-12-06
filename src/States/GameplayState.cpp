@@ -54,8 +54,12 @@ GameplayState::GameplayState(GameEngine* game)
 	texts.push_back(text);
 	//230, 220
 
+	players.push_back(new Player(0,ControlType::MANUAL,"stickmanwarrior",Course::LEFT));
+	players.push_back(new Player(0,ControlType::MANUAL,"stickmanwizzard",Course::RIGHT));
+
 
 	///***GUI***
+	/*
 	gui_theme = std::make_shared<tgui::Theme>("Data/gui/mainMenuButton.txt");
 
 	tgui::ProgressBar::Ptr player_healthbar = std::make_shared<tgui::ProgressBar>();
@@ -86,7 +90,7 @@ GameplayState::GameplayState(GameEngine* game)
 	deaths_display->setPosition(0.05 * tgui::bindWidth(gui), 0.07 * tgui::bindHeight(gui) );
 	deaths_display->setText("Deaths: 0");// + std::to_string(players[0]->deaths));
 	gui.add(deaths_display,"deaths_display");
-
+*/
 //	Player* ptr = AddPlayer(PlayerType::SHIP, ControlType::MANUAL);
 //	ptr->control.SetKeys(sf::Keyboard::A, sf::Keyboard::D, sf::Keyboard::Space);
 //	ptr->control.SetActiveJoystick(0);
@@ -127,6 +131,9 @@ void GameplayState::Update(float time_step)
 		fpscounter.UpdateTime(deltatime * 1000);
 
 		UpdateObjects(deltatime);
+
+		for(auto& it : players)
+			it->Update(deltatime);
 
 		CheckCollisions(deltatime);
 
@@ -180,15 +187,17 @@ void GameplayState::Update(float time_step)
 	if( !players.empty())
 	{
 		///Healthbar
-		gui.get<tgui::ProgressBar>("main_player_healthbar")->setValue(players[0]->GetHP());
+	//	gui.get<tgui::ProgressBar>("main_player_healthbar")->setValue(players[0]->GetHP());
 
 		///Kills and Deaths
 //		gui.get<tgui::Label>("kills_display")->setText("Kills: " + std::to_string(players[0]->kills));
 //		gui.get<tgui::Label>("deaths_display")->setText("Deaths: " + std::to_string(players[0]->deaths));
 	}
 
+
+
 	///Time Display
-	gui.get<tgui::Label>("time_display")->setText(to_string(timer.GetTimeLeft()/60)+":"+to_string((timer.GetTimeLeft()%60)/10)+to_string((timer.GetTimeLeft()%60)%10));
+//	gui.get<tgui::Label>("time_display")->setText(to_string(timer.GetTimeLeft()/60)+":"+to_string((timer.GetTimeLeft()%60)/10)+to_string((timer.GetTimeLeft()%60)%10));
 
 	//Checking if the time has come ! ///END LEVEL SCREEEN
 	if(timer.Passed() && !showendgui)
@@ -239,6 +248,9 @@ void GameplayState::HandleEvents(sf::Event& event)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::V))
 		plane->SwitchGridView();
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
+		showids = !showids;
+
 	//dmg to all
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 		for(auto& it : units)
@@ -251,15 +263,15 @@ void GameplayState::HandleEvents(sf::Event& event)
 	int x = randomY(engine->gen);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)){
 		if(randomY(engine->gen)%2 == 0)
-			units.push_back(new Unit("fighter",Course::LEFT,x));
+			units.push_back(new Unit("thief",Course::LEFT,x));
 		else
 			units.push_back(new Unit("mage",Course::RIGHT,x));
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-		units.push_back(new Unit("fighter",Course::LEFT,x));
+		units.push_back(new Unit("stickman",Course::LEFT,x));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		units.push_back(new Unit("stickman",Course::RIGHT,x));
+		units.push_back(new Unit("fighter",Course::RIGHT,x));
 
 
 	//camera
@@ -291,7 +303,7 @@ void GameplayState::HandleEvents(sf::Event& event)
 		engine->ChangeState(new GameplayState(engine));
 	}
 
-	gui.handleEvent(event);
+//	gui.handleEvent(event);
 }
 
 void GameplayState::Render()
@@ -318,7 +330,10 @@ void GameplayState::Render()
 	}*/
 
 	for(auto& it : units)
-		it->Render(engine->window);
+		it->Render(engine->window, showids);
+
+	for(auto& it : players)
+		it->Render(engine->window, showids);
 }
 
 void GameplayState::RenderMapToActiveView()
@@ -331,8 +346,9 @@ void GameplayState::RenderObjectsToActiveView()
 	for(auto& it : objects)
 		it->Render(engine->window);
 
+		/*
 	for(auto& it : players)
-		it->Render(engine->window);
+		it->Render(engine->window);*/
 }
 
 void GameplayState::UpdateObjects(float gametime)
@@ -352,31 +368,31 @@ void GameplayState::UpdateObjects(float gametime)
 
 
 	///players
-	for(auto& it : players)
-	{
-		it->control.Update(&players);
-		it->Update(1.0);
+//	for(auto& it : players)
+//	{
+//		it->control.Update(&players);
+//		it->Update(1.0);
 
 //		if(it->GetHP()<=0 && it->alive)
-		{
-			KillPlayer(it);
-			continue;
-		}
-	}
+//		{
+//			KillPlayer(it);
+//			continue;
+	//	}
+//	}
 }
 
 void GameplayState::CheckCollisions(float gametime)
 {
-	for(auto& it : players)
-	{
+//	for(auto& it : players)
+//	{
 //		if( !it->alive)
 //			continue;
 
 		//check collisions with all objects
-		for(int j = 0; j < objects.size(); j++)
-		{
-			if(it->CheckBoundingBoxTest(objects[j]->sprite))
-			{
+	//	for(int j = 0; j < objects.size(); j++)
+	//	{
+	//		if(it->CheckBoundingBoxTest(objects[j]->sprite))
+	//		{
 				/*if(objects[j]->type == ObjectType::OBSTACLE)
 				{
 					if(it->CheckPixelPerfectTest(objects[j]->sprite))
@@ -384,9 +400,9 @@ void GameplayState::CheckCollisions(float gametime)
 						//do something
 					}
 				}*/
-			}
-		}
-	}
+		//	}
+		//}
+//	}
 }
 
 
@@ -413,7 +429,6 @@ void GameplayState::KillPlayer(Player* player)
 
 		camera.AddShakingEffect(1000);
 
-		player->Kill();
 //		player->deathtimer.AddDelta(5000);
 
 	}

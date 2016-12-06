@@ -29,20 +29,21 @@ class Player : public UnitObject
 	int maxmana,mana;
 	int cards = 0;
 	int draws = 5;
+	float healthregen = 0, manaregen = 0;
 
 	public:
 		PlayerType playertype;
 
 		PlayerControl control;
 
-		Player(PlayerType typeplayer, int idparam, ControlType controltype);
-		Player(PlayerType typeplayer, int idparam, ControlType controltype,const std::string& name, Course direction);
+		//Player(PlayerType typeplayer, int idparam, ControlType controltype);
+		Player(int idparam, ControlType controltype,const std::string& name, Course direction);
 		~Player();
 
 		void CheckInput();
 
 		void Update(float delta_time) override;
-		void Render(sf::RenderTarget& window) override;
+		void Render(sf::RenderTarget& window, bool showids) override;
 
 		void SetPosition(float x, float y) override;
 
@@ -50,7 +51,8 @@ class Player : public UnitObject
 
 		void SetHP(short int value);
 		int GetHP();
-		void DecreaseHealth(float value);
+
+		void ActiveSheet() override;
 
 		/****
 		Should replace by one CheckCollision() method
@@ -87,12 +89,6 @@ class Player : public UnitObject
 
 			return false;
 		}
-
-		void Spawn(sf::Vector2f pos);
-
-		void Hit(Player* enemy);
-		void Kill();
-
 
 	protected:
 		int id;

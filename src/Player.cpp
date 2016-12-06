@@ -1,23 +1,68 @@
 #include "Player.hpp"
 
-Player::Player(PlayerType typeplayer, int idparam, ControlType controltype,const std::string& name, Course direction)
+Player::Player(int idparam, ControlType controltype,const std::string& name, Course direction)
 	: UnitObject(name, direction, ObjectType::PLAYER),
 	  control(this, idparam, controltype)
 {
-	playertype = typeplayer;
 	velocity = 0.0f;
+
+	stance = Stance::STANDING;
 
 	id = idparam;
 
-	maxhp = 100.0f;
-	SetHP(maxhp);
+	std::string s_frametime,s_stand,s_death,s_casting,s_release;
 
-	sprite.setTexture( *resources->GetTexture("ships/ship1", TextureType::SPRITE));
+	std::fstream file;
+	file.open("Data/characters/"+name+"/animation.csv", std::ios::in);
 
-	auto rect = sprite.getLocalBounds();
-	sprite.setOrigin(rect.width / 2.0f, rect.height / 2.0f);
-	sprite.scale(SCALE, SCALE);
+	if(!file.good()){
+		Log("No animations Character File "+name+"\n");
+		std::cout << "No anim file!\n";
+	}
 
+	ReadRowFromCSV(file, s_frametime,s_stand,s_death,s_casting,s_release); //1st row - headers
+	ReadRowFromCSV(file, s_frametime,s_stand,s_death,s_casting,s_release); //data
+
+	if(s_frametime == "0")
+		s_frametime = "100";
+
+	frametime = std::stoi(s_frametime);
+
+
+	sheets[Stance::STANDING] = Sheet("characters/"+name+"/stand",std::stoi(s_stand));
+	sheets[Stance::DIEING] = Sheet("characters/"+name+"/death",std::stoi(s_death));
+	sheets[Stance::RELEASE] = Sheet("characters/"+name+"/release",std::stoi(s_release));
+	sheets[Stance::CASTING] = Sheet("characters/"+name+"/casting",std::stoi(s_casting));
+
+	std::string s_maxhealth,s_maxmana,s_healthregen,s_manaregen;
+
+	file.close();
+
+	file.open("Data/characters/"+name+"/stats.csv", std::ios::in);
+
+	if(!file.good())
+		Log("No stats Character File "+name+"\n");
+
+	ReadRowFromCSV(file, s_maxhealth,s_maxmana,s_healthregen,s_manaregen); //1st row - headers
+	ReadRowFromCSV(file, s_maxhealth,s_maxmana,s_healthregen,s_manaregen); //data
+
+	maxhealth = std::stoi(s_maxhealth);
+	health = maxhealth;
+	maxmana = std::stoi(s_maxmana);
+	mana = maxmana;
+	healthregen = std::stof(s_healthregen);
+	manaregen = std::stof(s_manaregen);
+
+	SwitchStance(Stance::STANDING);
+
+	if(course == Course::LEFT)
+	{
+		sprite.setPosition(sf::Vector2f(resources->GetVariable("leftstartpos")-50,300));
+	}
+	else
+	{
+		sprite.setPosition(sf::Vector2f(resources->GetVariable("rightstartpos")+50,300));
+	}
 }
 
 Player::~Player()
@@ -40,21 +85,6 @@ int Player::GetHP()
 }
 
 
-void Player::DecreaseHealth(float value)
-{
-	if(hp > 0) //to prevent double kill same player
-	{
-		hp -= value;
-
-		if(hp <= 0)
-		{
-			hp = 0;
-
-//			deaths++;
-		}
-	}
-}
-
 void Player::CheckInput()
 {
 	control.CheckInput();
@@ -62,7 +92,7 @@ void Player::CheckInput()
 
 void Player::Update(float delta_time)
 {
-
+	UnitObject::Update(delta_time);
 		/*
 		particlesystem.setPosition(sprite.getPosition());
 		particlesystem.update(fpscounter.TIME_STEP);
@@ -70,11 +100,11 @@ void Player::Update(float delta_time)
 
 }
 
-void Player::Render(sf::RenderTarget& window)
+void Player::Render(sf::RenderTarget& window, bool showids)
 {
+	window.draw(sprite);
 
-		window.draw(sprite);
-
+	UnitObject::Render(window, showids);
 		//window.draw(sprite);
 		//window.draw(ship.parts[PartLocation::BODY].sprite);
 
@@ -82,35 +112,14 @@ void Player::Render(sf::RenderTarget& window)
 
 }
 
+void Player::ActiveSheet()
+{
+	UnitObject::ActiveSheet();
+	ShowDamage();
+}
+
 void Player::SetPosition(float x, float y)
 {
 	sf::Vector2f pos(x, y);
 	sprite.setPosition(x, y);
-}
-
-void Player::Spawn(sf::Vector2f pos)
-{
-	SetPosition(pos.x, pos.y);
-	SetHP(maxhp);
-
-	velocity = 0.0f;
-}
-
-
-void Player::Hit(Player* enemy)
-{
-	if(enemy->GetHP() > 0)
-	{
-		enemy->DecreaseHealth(500);
-
-		if(enemy->GetHP() == 0)
-		{
-//			kills++;
-		}
-	}
-}
-
-void Player::Kill()
-{
-
 }

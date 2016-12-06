@@ -19,7 +19,7 @@ class UnitObject : public Object
 		int id;
 
 		void Update(float frame_time) override;
-		void Render(sf::RenderTarget& window) override;
+		virtual void Render(sf::RenderTarget& window, bool showids);
 
 		void SetPosition(float x, float y) override;
 

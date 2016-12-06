@@ -151,10 +151,10 @@ void Unit::Update(float delta_time)
 	}
 }
 
-void Unit::Render(sf::RenderTarget& window)
+void Unit::Render(sf::RenderTarget& window, bool showids)
 {
 	window.draw(sprite);
-	UnitObject::Render(window);
+	UnitObject::Render(window, showids);
 }
 
 void Unit::ActiveSheet()

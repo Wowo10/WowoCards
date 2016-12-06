@@ -52,6 +52,7 @@ class GameplayState : public GameState
 		std::vector<sf::Text> texts;
 		bool showgui = true;
 		bool showendgui = false;
+		bool showids = true;
 		tgui::Gui end_gui;
 		tgui::Theme::Ptr gui_theme;
 

@@ -32,7 +32,9 @@ enum Stance
 	MOVING = 0,
 	STANDING,
 	ATTACKING,
-	DIEING
+	DIEING,
+	CASTING,
+	RELEASE
 };
 
 struct Sheet

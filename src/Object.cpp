@@ -62,9 +62,18 @@ void Object::SwitchStance(Stance stance)
 {
 //	std::cout << "Stance: "<<static_cast<int>(stance) <<"\n";
 
-	this->stance = stance;
+	auto temp = sheets.find(stance);
 
-	ActiveSheet();
+	if(temp != sheets.end())
+	{
+		this->stance = stance;
+
+		ActiveSheet();
+	}
+	else
+	{
+		std::cout << "No Such sheet!\n";
+	}
 }
 
 void Object::Update(float delta_time)

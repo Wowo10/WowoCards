@@ -87,6 +87,8 @@ void GameEngine::Update()
 
 void GameEngine::Exit()
 {
+	CloseLog();
+
 	nextoperation = StateOperation::CLEAN;
 	exit = true;
 }

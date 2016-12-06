@@ -26,9 +26,9 @@ void UnitObject::Update(float delta_time)
 	TID.setPosition(GetPosition());
 }
 
-void UnitObject::Render(sf::RenderTarget& window)
+void UnitObject::Render(sf::RenderTarget& window, bool showids)
 {
-	if(true) //probably need showIDs bool
+	if(showids)
 		window.draw(TID);
 }
 

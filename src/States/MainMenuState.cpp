@@ -54,12 +54,13 @@ MainMenuState::MainMenuState(GameEngine* game)
 	//To make the mouse a colliding object
 	OrientedBoundingBox mouse_box(sf::Vector2f(sf::Mouse::getPosition().x,sf::Mouse::getPosition().y));
 
+	/*
 	if (main_theme.openFromFile("Data/sound/mainmenu_theme_demo.ogg"))
 	{
 		main_theme.play();
 		main_theme.setVolume(engine->options.volumeMusic);
 		main_theme.setLoop(true);
-	}
+	}*/
 }
 
 MainMenuState::~MainMenuState()

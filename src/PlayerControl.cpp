@@ -54,6 +54,7 @@ void PlayerControl::CheckInput()
 
 void PlayerControl::CheckManualInput()
 {
+	/*
 	if (sf::Keyboard::isKeyPressed(leftkey))
 		leftpressed = true;
 	else
@@ -85,8 +86,8 @@ void PlayerControl::CheckManualInput()
 		else
 			shootpressed = false;
 	}
+	*/
 }
-
 
 void PlayerControl::Update(std::vector<Player*>* players)
 {
