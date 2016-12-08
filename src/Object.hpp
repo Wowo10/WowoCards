@@ -29,7 +29,8 @@ enum Course
 
 enum Stance
 {
-	MOVING = 0,
+	NONE = 0,
+	MOVING,
 	STANDING,
 	ATTACKING,
 	DIEING,
@@ -80,7 +81,7 @@ class Object
 		int frametime;
 
 		virtual void ActiveSheet();
-		void SwitchStance(Stance stance);
+		virtual void SwitchStance(Stance stance);
 
 		sf::Sprite sprite;
 

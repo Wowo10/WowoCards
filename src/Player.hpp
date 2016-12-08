@@ -36,6 +36,11 @@ class Player : public UnitObject
 
 		PlayerControl control;
 
+		bool casted = false;
+		UnitObject* spelltarget = nullptr;
+		void StartCasting();
+		void ReleaseSpell();
+
 		//Player(PlayerType typeplayer, int idparam, ControlType controltype);
 		Player(int idparam, ControlType controltype,const std::string& name, Course direction);
 		~Player();

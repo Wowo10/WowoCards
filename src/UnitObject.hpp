@@ -26,6 +26,10 @@ class UnitObject : public Object
 		void ApplyDamage(int damage);
 		void ShowDamage();
 
+		void SwitchStance(Stance stance) override;
+
+		void SetBounds();
+
 		bool IsDieing();
 
 		void ActiveSheet() override;

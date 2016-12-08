@@ -90,7 +90,7 @@ GameplayState::GameplayState(GameEngine* game)
 	deaths_display->setPosition(0.05 * tgui::bindWidth(gui), 0.07 * tgui::bindHeight(gui) );
 	deaths_display->setText("Deaths: 0");// + std::to_string(players[0]->deaths));
 	gui.add(deaths_display,"deaths_display");
-*/
+	*/
 //	Player* ptr = AddPlayer(PlayerType::SHIP, ControlType::MANUAL);
 //	ptr->control.SetKeys(sf::Keyboard::A, sf::Keyboard::D, sf::Keyboard::Space);
 //	ptr->control.SetActiveJoystick(0);
@@ -173,6 +173,11 @@ void GameplayState::Update(float time_step)
 
 			if( (*it)->todelete)
 			{
+				for(auto jt = units.begin(); jt != units.end();jt++)
+				{
+					if((*jt)->GetTarget() == (*it))
+						(*jt)->ClearTarget();
+				}
 				delete (*it);
 				it = units.erase(it);
 			}
@@ -187,7 +192,7 @@ void GameplayState::Update(float time_step)
 	if( !players.empty())
 	{
 		///Healthbar
-	//	gui.get<tgui::ProgressBar>("main_player_healthbar")->setValue(players[0]->GetHP());
+		//	gui.get<tgui::ProgressBar>("main_player_healthbar")->setValue(players[0]->GetHP());
 
 		///Kills and Deaths
 //		gui.get<tgui::Label>("kills_display")->setText("Kills: " + std::to_string(players[0]->kills));
@@ -240,7 +245,6 @@ void GameplayState::HandleEvents(sf::Event& event)
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F4))
 		timemultiplier = timemultiplier*2.0f;
 
-
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		camera.AddShakingEffect(2000);
 
@@ -256,12 +260,30 @@ void GameplayState::HandleEvents(sf::Event& event)
 		for(auto& it : units)
 			it->ApplyDamage(1);
 
+	//CASTING TESTING
+	if (!players.empty() && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) //left
+	{
+		if(players[0]->stance != Stance::CASTING)
+			players[0]->StartCasting();
+		else
+			players[0]->ReleaseSpell();
+	}
+
+	if (!players.empty() && sf::Keyboard::isKeyPressed(sf::Keyboard::F))
+	{
+		if(players[1]->stance != Stance::CASTING)
+			players[1]->StartCasting();
+		else
+			players[1]->ReleaseSpell();
+	}
+
 	//Debugging positions
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::M))
 		std::cout<<"Mouse pos: "<<sf::Mouse::getPosition(engine->window).x<<" "<<sf::Mouse::getPosition(engine->window).y<<"\n";
 
 	int x = randomY(engine->gen);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)){
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+	{
 		if(randomY(engine->gen)%2 == 0)
 			units.push_back(new Unit("thief",Course::LEFT,x));
 		else
@@ -346,9 +368,9 @@ void GameplayState::RenderObjectsToActiveView()
 	for(auto& it : objects)
 		it->Render(engine->window);
 
-		/*
+	/*
 	for(auto& it : players)
-		it->Render(engine->window);*/
+	it->Render(engine->window);*/
 }
 
 void GameplayState::UpdateObjects(float gametime)
@@ -388,20 +410,20 @@ void GameplayState::CheckCollisions(float gametime)
 //		if( !it->alive)
 //			continue;
 
-		//check collisions with all objects
+	//check collisions with all objects
 	//	for(int j = 0; j < objects.size(); j++)
 	//	{
 	//		if(it->CheckBoundingBoxTest(objects[j]->sprite))
 	//		{
-				/*if(objects[j]->type == ObjectType::OBSTACLE)
-				{
-					if(it->CheckPixelPerfectTest(objects[j]->sprite))
-					{
-						//do something
-					}
-				}*/
-		//	}
-		//}
+	/*if(objects[j]->type == ObjectType::OBSTACLE)
+	{
+		if(it->CheckPixelPerfectTest(objects[j]->sprite))
+		{
+			//do something
+		}
+	}*/
+	//	}
+	//}
 //	}
 }
 

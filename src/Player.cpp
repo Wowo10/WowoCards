@@ -6,8 +6,6 @@ Player::Player(int idparam, ControlType controltype,const std::string& name, Cou
 {
 	velocity = 0.0f;
 
-	stance = Stance::STANDING;
-
 	id = idparam;
 
 	std::string s_frametime,s_stand,s_death,s_casting,s_release;
@@ -15,7 +13,8 @@ Player::Player(int idparam, ControlType controltype,const std::string& name, Cou
 	std::fstream file;
 	file.open("Data/characters/"+name+"/animation.csv", std::ios::in);
 
-	if(!file.good()){
+	if(!file.good())
+	{
 		Log("No animations Character File "+name+"\n");
 		std::cout << "No anim file!\n";
 	}
@@ -70,6 +69,19 @@ Player::~Player()
 
 }
 
+void Player::StartCasting()
+{
+	if(spelltarget == nullptr)
+		SwitchStance(Stance::CASTING);
+}
+
+void Player::ReleaseSpell()
+{
+	SwitchStance(Stance::RELEASE);
+	//spelltarget.ApplyDamage(1/*spelldmg*/); later
+	spelltarget = nullptr;
+}
+
 void Player::SetHP(short int value)
 {
 	hp = value;
@@ -93,10 +105,26 @@ void Player::CheckInput()
 void Player::Update(float delta_time)
 {
 	UnitObject::Update(delta_time);
-		/*
-		particlesystem.setPosition(sprite.getPosition());
-		particlesystem.update(fpscounter.TIME_STEP);
-		particlesystem.fuel(50);*/
+	/*
+	particlesystem.setPosition(sprite.getPosition());
+	particlesystem.update(fpscounter.TIME_STEP);
+	particlesystem.fuel(50);*/
+	if(stance == Stance::RELEASE)
+	{
+		if(currentframe == sheets[stance].maxframes - 2 && !casted)
+		{
+			//Spell.Effect(target)
+			//target->ApplyDamage(damage);
+			casted = true;
+		}
+		if(currentframe == sheets[stance].maxframes -1)
+		{
+			casted = false;
+
+			//attacktimer.AddDelta(attackdealey);
+			SwitchStance(Stance::STANDING);
+		}
+	}
 
 }
 
@@ -105,10 +133,10 @@ void Player::Render(sf::RenderTarget& window, bool showids)
 	window.draw(sprite);
 
 	UnitObject::Render(window, showids);
-		//window.draw(sprite);
-		//window.draw(ship.parts[PartLocation::BODY].sprite);
+	//window.draw(sprite);
+	//window.draw(ship.parts[PartLocation::BODY].sprite);
 
-		//window.draw(particlesystem);
+	//window.draw(particlesystem);
 
 }
 

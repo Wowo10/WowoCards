@@ -5,6 +5,8 @@ Object::Object(ObjectType objtype, std::string name, int owner_id)
 	type = objtype;
 	owner = owner_id;
 
+	stance = Stance::NONE;
+
 	SetSprite(name);
 }
 
@@ -60,19 +62,22 @@ void Object::ActiveSheet()
 
 void Object::SwitchStance(Stance stance)
 {
-//	std::cout << "Stance: "<<static_cast<int>(stance) <<"\n";
+//	std::cout << "ID: " << id << " Stance: "<<static_cast<int>(stance) <<"\n";
 
-	auto temp = sheets.find(stance);
-
-	if(temp != sheets.end())
+	if(stance != this->stance && this->stance != Stance::DIEING)
 	{
-		this->stance = stance;
+		auto temp = sheets.find(stance);
 
-		ActiveSheet();
-	}
-	else
-	{
-		std::cout << "No Such sheet!\n";
+		if(temp != sheets.end())
+		{
+			this->stance = stance;
+
+			ActiveSheet();
+		}
+		else
+		{
+			std::cout << "No Such sheet: "<<stance<<"\n";
+		}
 	}
 }
 
@@ -122,5 +127,5 @@ void Object::SetSprite(const std::string& name)
 	sprite.setTexture( *resources->GetTexture(name, TextureType::SPRITE));
 
 	auto rect = sprite.getLocalBounds();
-	sprite.setOrigin(rect.width / 2.0f, rect.height);
+	sprite.setOrigin(rect.width / 2.0f, rect.height/ 2.0f);
 }

@@ -20,6 +20,9 @@ class Unit : public UnitObject
 		void Update(float frame_time) override;
 		void Render(sf::RenderTarget& window, bool showids) override;
 
+		UnitObject* GetTarget();
+		void ClearTarget();
+
 		//void SetPosition(float x, float y) override;
 
 		//void ApplyDamage(int damage);

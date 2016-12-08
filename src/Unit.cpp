@@ -5,7 +5,6 @@ Unit::Unit(const std::string& name, Course direction, int posY)
 {
 	//this->frametime = frametime;
 
-	stance = Stance::MOVING;
 	attacking = false;
 
 	std::string s_frametime,s_attack,s_death,s_move,s_stand;
@@ -75,6 +74,7 @@ Unit::~Unit()
 void Unit::Update(float delta_time)
 {
 	UnitObject::Update(delta_time);
+
 	//moving
 	if(stance == Stance::MOVING)
 	{
@@ -140,14 +140,12 @@ void Unit::Update(float delta_time)
 				SwitchStance(Stance::MOVING);
 			else if(attacktimer.Passed())
 				SwitchStance(Stance::ATTACKING);
-
 		}
 	}
 
 	if(target!= nullptr && target->IsDieing() && stance != Stance::DIEING)
 	{
-		target = nullptr;
-		SwitchStance(Stance::MOVING);
+		ClearTarget();
 	}
 }
 
@@ -155,6 +153,17 @@ void Unit::Render(sf::RenderTarget& window, bool showids)
 {
 	window.draw(sprite);
 	UnitObject::Render(window, showids);
+}
+
+UnitObject* Unit::GetTarget()
+{
+	return target;
+}
+
+void Unit::ClearTarget()
+{
+	target = nullptr;
+	SwitchStance(Stance::MOVING);
 }
 
 void Unit::ActiveSheet()
