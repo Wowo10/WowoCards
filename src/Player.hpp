@@ -31,11 +31,14 @@ class Player : public UnitObject
 	int draws = 5;
 	float healthregen = 0, manaregen = 0;
 
+	GameTimer castingtimer = 1000;
+
 	public:
 		PlayerType playertype;
 
 		PlayerControl control;
 
+		void Cast();
 		bool casted = false;
 		UnitObject* spelltarget = nullptr;
 		void StartCasting();

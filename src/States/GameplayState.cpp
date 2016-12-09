@@ -263,18 +263,12 @@ void GameplayState::HandleEvents(sf::Event& event)
 	//CASTING TESTING
 	if (!players.empty() && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) //left
 	{
-		if(players[0]->stance != Stance::CASTING)
-			players[0]->StartCasting();
-		else
-			players[0]->ReleaseSpell();
+		players[0]->Cast();
 	}
 
 	if (!players.empty() && sf::Keyboard::isKeyPressed(sf::Keyboard::F))
 	{
-		if(players[1]->stance != Stance::CASTING)
-			players[1]->StartCasting();
-		else
-			players[1]->ReleaseSpell();
+		players[1]->Cast();
 	}
 
 	//Debugging positions

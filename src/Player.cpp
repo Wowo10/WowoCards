@@ -69,10 +69,23 @@ Player::~Player()
 
 }
 
+void Player::Cast()
+{
+	if(spelltarget == nullptr && castingtimer.Passed())
+	{
+		if(stance != Stance::CASTING)
+			StartCasting();
+		else
+			ReleaseSpell();
+		castingtimer.AddDelta(1000);
+	}
+}
+
 void Player::StartCasting()
 {
-	if(spelltarget == nullptr)
-		SwitchStance(Stance::CASTING);
+
+	SwitchStance(Stance::CASTING);
+
 }
 
 void Player::ReleaseSpell()
@@ -125,6 +138,10 @@ void Player::Update(float delta_time)
 			SwitchStance(Stance::STANDING);
 		}
 	}
+	if(course == Course::LEFT)
+		sprite.setScale(2.0f,2.0f);
+	else
+		sprite.setScale(-2.0f,2.0f);
 
 }
 

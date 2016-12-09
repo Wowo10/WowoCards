@@ -48,7 +48,7 @@ void UnitObject::SetPosition(float x,float y)
 
 void UnitObject::SwitchStance(Stance stance)
 {
-	std::cout << "ID: " << id << " Stance: "<<static_cast<int>(stance) <<"\n";
+	//std::cout << "ID: " << id << " Stance: "<<static_cast<int>(stance) <<"\n"; DEBUG
 
 	Object::SwitchStance(stance);
 }
