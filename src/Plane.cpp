@@ -5,13 +5,6 @@ Plane::Plane(sf::Color planecolor, sf::RenderTarget& window)
 	width = resources->GetVariable("planebreadth");
 	color = planecolor;
 
-	sf::RectangleShape foo(sf::Vector2f(window.getSize().x, width)); //lel, todelete
-	background = foo;
-
-	background.setFillColor(color);
-
-	background.setPosition(0,window.getSize().y/2-(width/2));
-
 	if(text)
 	{
 		sf::Texture* temp = resources->GetTexture("img/grass");
@@ -21,6 +14,17 @@ Plane::Plane(sf::Color planecolor, sf::RenderTarget& window)
 		//bgtext.getTexture()->setRepeated(true);
 		bgtext->setTextureRect({ 0, 0, window.getSize().x, width});;
 	}
+	else
+	{
+		sf::RectangleShape foo(sf::Vector2f(window.getSize().x, width)); //lel, todelete
+		background = foo;
+
+		background.setFillColor(color);
+
+		background.setPosition(0,window.getSize().y/2-(width/2));
+	}
+
+	std::cout << "windowsize: x="<< window.getSize().x << " y=" << window.getSize().y << " x/2=" << window.getSize().x/2 << " y/2=" <<window.getSize().y/2<<"\n";
 
 	float gridwidth = resources->GetVariable("gridwidth");
 	float temp = window.getSize().x/(resources->GetVariable("columns") + 1);
@@ -39,6 +43,8 @@ Plane::Plane(sf::Color planecolor, sf::RenderTarget& window)
 		grid.push_back(line);
 	}
 
+	std::cout << "horizontallines: "<<grid.size() << "\n";
+
 	temp = width/(resources->GetVariable("verses") + 1);
 
 	//horizontal lines
@@ -52,6 +58,8 @@ Plane::Plane(sf::Color planecolor, sf::RenderTarget& window)
 
 		grid.push_back(line);
 	}
+
+	std::cout << "alllines: "<<grid.size() << "\n\n";
 
 }
 
@@ -114,6 +122,9 @@ void Plane::Draw(sf::RenderTarget& window)
 
 float Plane::GetStartY()
 {
+	if(text)
+		return bgtext->getPosition().y;
+
 	return background.getPosition().y;
 }
 

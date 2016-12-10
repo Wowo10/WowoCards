@@ -17,9 +17,9 @@ map_size_x;200000;
 map_size_y;4000;
 single_round_time;9999;
 planebreadth;250;
-gridwidth;3;
-columns;15;
-verses;3;
+gridwidth;2;
+columns;10;
+verses;2;
 leftstartpos;80;starting X distance from edge of window
 rightstartpos;720;starting X distance from edge of window
 aggressiondistance;50;square of position that unit needs to start attacking

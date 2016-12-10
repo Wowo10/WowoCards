@@ -279,15 +279,15 @@ void GameplayState::HandleEvents(sf::Event& event)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 	{
 		if(randomY(engine->gen)%2 == 0)
-			units.push_back(new Unit("thief",Course::LEFT,x));
+			units.push_back(new Unit("frog",Course::LEFT,x));
 		else
-			units.push_back(new Unit("mage",Course::RIGHT,x));
+			units.push_back(new Unit("stickman",Course::RIGHT,x));
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 		units.push_back(new Unit("stickman",Course::LEFT,x));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		units.push_back(new Unit("fighter",Course::RIGHT,x));
+		units.push_back(new Unit("frog",Course::RIGHT,x));
 
 
 	//camera

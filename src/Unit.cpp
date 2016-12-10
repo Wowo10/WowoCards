@@ -119,6 +119,11 @@ void Unit::Update(float delta_time)
 	}
 	else if(stance == Stance::ATTACKING)
 	{
+		if(currentframe == 0)
+		{
+			attacktimer.AddDelta(attackdealey);
+		}
+
 		if(currentframe == sheets[stance].maxframes - 2 && !attacked)
 		{
 			target->ApplyDamage(damage);
@@ -128,7 +133,6 @@ void Unit::Update(float delta_time)
 		{
 			attacked = false;
 
-			attacktimer.AddDelta(attackdealey);
 			SwitchStance(Stance::STANDING);
 		}
 	}

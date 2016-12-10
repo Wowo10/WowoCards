@@ -139,9 +139,9 @@ void Player::Update(float delta_time)
 		}
 	}
 	if(course == Course::LEFT)
-		sprite.setScale(2.0f,2.0f);
+		sprite.setScale(1.5f,1.5f);
 	else
-		sprite.setScale(-2.0f,2.0f);
+		sprite.setScale(-1.5f,1.5f);
 
 }
 
