@@ -3,13 +3,11 @@
 int UnitObject::ID = 0;
 
 UnitObject::UnitObject(const std::string& name, Course direction, ObjectType type)
-	: Object(type, name,direction)
+	: AnimatedObject(name, direction, ObjectType::UNIT)
 {
 	id = ID++;
 
 	stance = Stance::NONE;
-
-	SetBounds();
 
 	TID.setFont(resources->font);
 	TID.setPosition(GetPosition());
@@ -24,7 +22,7 @@ UnitObject::~UnitObject()
 
 void UnitObject::Update(float delta_time)
 {
-	Object::Update(delta_time);
+	AnimatedObject::Update(delta_time);
 	//moving
 
 	TID.setPosition(GetPosition());
@@ -38,7 +36,7 @@ void UnitObject::Render(sf::RenderTarget& window, bool showids)
 
 void UnitObject::ActiveSheet()
 {
-	Object::ActiveSheet();
+	AnimatedObject::ActiveSheet();
 }
 
 void UnitObject::SetPosition(float x,float y)
@@ -50,7 +48,7 @@ void UnitObject::SwitchStance(Stance stance)
 {
 	//std::cout << "ID: " << id << " Stance: "<<static_cast<int>(stance) <<"\n"; DEBUG
 
-	Object::SwitchStance(stance);
+	AnimatedObject::SwitchStance(stance);
 }
 
 bool UnitObject::IsDieing()
@@ -84,8 +82,4 @@ void UnitObject::ShowDamage()
 	sprite.setColor(sf::Color(255,value,value));
 }
 
-void UnitObject::SetBounds()
-{
-	auto rect = sprite.getLocalBounds();
-	sprite.setOrigin(rect.width / 2.0f, rect.height);
-}
+

@@ -62,6 +62,8 @@ class Player : public UnitObject
 
 		void ActiveSheet() override;
 
+
+
 		/****
 		Should replace by one CheckCollision() method
 		with pixel perfect testing only parts, which colliding by bounding box

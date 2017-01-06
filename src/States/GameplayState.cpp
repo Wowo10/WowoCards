@@ -271,6 +271,8 @@ void GameplayState::HandleEvents(sf::Event& event)
 		players[1]->Cast();
 	}
 
+
+
 	//Debugging positions
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::M))
 		std::cout<<"Mouse pos: "<<sf::Mouse::getPosition(engine->window).x<<" "<<sf::Mouse::getPosition(engine->window).y<<"\n";
@@ -279,7 +281,7 @@ void GameplayState::HandleEvents(sf::Event& event)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 	{
 		if(randomY(engine->gen)%2 == 0)
-			units.push_back(new Unit("frog",Course::LEFT,x));
+			units.push_back(new Unit("fighter",Course::LEFT,x));
 		else
 			units.push_back(new Unit("stickman",Course::RIGHT,x));
 	}
@@ -287,19 +289,7 @@ void GameplayState::HandleEvents(sf::Event& event)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 		units.push_back(new Unit("stickman",Course::LEFT,x));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		units.push_back(new Unit("frog",Course::RIGHT,x));
-
-
-	//camera
-	if(event.type == sf::Event::MouseWheelMoved)
-	{
-		camera.Zoom(event.mouseWheel.delta);
-	}
-
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract))
-		camera.Zoom(1.0f);
-	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Add))
-		camera.Zoom(-1.0f);
+		units.push_back(new Unit("fighter",Course::RIGHT,x));
 
 	static int pausetimer = 0;
 	if(pausetimer < fpscounter.GetTime() && sf::Keyboard::isKeyPressed(sf::Keyboard::P))
@@ -312,12 +302,7 @@ void GameplayState::HandleEvents(sf::Event& event)
 		pausetimer = fpscounter.GetTime() + 300;
 	}
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-	{
-		rounds = 0;
 
-		engine->ChangeState(new GameplayState(engine));
-	}
 
 //	gui.handleEvent(event);
 }

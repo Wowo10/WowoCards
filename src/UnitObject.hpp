@@ -1,9 +1,9 @@
 #ifndef UNITOBJECT_HPP_INCLUDED
 #define UNITOBJECT_HPP_INCLUDED
 
-#include "Object.hpp"
+#include "AnimatedObject.hpp"
 
-class UnitObject : public Object
+class UnitObject : public AnimatedObject
 {
 	protected:
 		int health, maxhealth;
@@ -27,8 +27,6 @@ class UnitObject : public Object
 		void ShowDamage();
 
 		void SwitchStance(Stance stance) override;
-
-		void SetBounds();
 
 		bool IsDieing();
 

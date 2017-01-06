@@ -27,35 +27,6 @@ enum Course
 	RIGHT
 };
 
-enum Stance
-{
-	NONE = 0,
-	MOVING,
-	STANDING,
-	ATTACKING,
-	DIEING,
-	CASTING,
-	RELEASE
-};
-
-struct Sheet
-{
-	sf::Sprite spritesheet;
-	sf::Vector2f rect;
-	int maxframes;
-	Sheet(const std::string& path, int framescount)
-	{
-		spritesheet.setTexture(*resources->GetTexture(path));
-		maxframes = framescount;
-		rect.x = (int)spritesheet.getGlobalBounds().width/framescount;
-		rect.y = spritesheet.getGlobalBounds().height;
-	}
-	Sheet()
-	{
-
-	}
-};
-
 class Object
 {
 	public:
@@ -63,6 +34,7 @@ class Object
 		Object(ObjectType objtype);
 		Object(ObjectType objtype, std::string graphic, sf::Vector2f pos);
 		Object(ObjectType objtype, std::string path, Course direction);
+		Object(ObjectType objtype, Course direction);
 
 		virtual ~Object();
 
@@ -70,18 +42,7 @@ class Object
 
 		std::string name;
 
-		//Rendering
-		std::map<Stance, Sheet> sheets;
-
-		Stance stance;
 		Course course;
-		GameTimer animationtimer;
-
-		int currentframe;
-		int frametime;
-
-		virtual void ActiveSheet();
-		virtual void SwitchStance(Stance stance);
 
 		sf::Sprite sprite;
 
@@ -99,7 +60,6 @@ class Object
 
 		virtual void Update(float delta_time);
 		virtual void Render(sf::RenderTarget& window);
-
 
 		bool todelete = false;
 
