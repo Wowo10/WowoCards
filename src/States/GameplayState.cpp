@@ -22,8 +22,8 @@ GameplayState::GameplayState(GameEngine* game)
 		(engine->window.getSize().y/2-(resources->GetVariable("planebreadth")/2) * 1.2),
 		(engine->window.getSize().y/2+(resources->GetVariable("planebreadth")/2) * 0.8));
 
-	units.push_back(new Unit("zombie",Course::LEFT,randomY(engine->gen))); //testings
-	units.push_back(new Unit("zombie",Course::RIGHT,randomY(engine->gen)));
+	//nits.push_back(new Unit("zombie",Course::LEFT,randomY(engine->gen))); //testings
+	//units.push_back(new Unit("zombie",Course::RIGHT,randomY(engine->gen)));
 
 	srand(time(NULL));
 
@@ -57,6 +57,8 @@ GameplayState::GameplayState(GameEngine* game)
 	players.push_back(new Player(0,ControlType::MANUAL,"stickmanwarrior",Course::LEFT));
 	players.push_back(new Player(0,ControlType::MANUAL,"stickmanwizzard",Course::RIGHT));
 
+	leftspawntimer.AddDelta(1);
+	rightspawntimer.AddDelta(1);
 
 	///***GUI***
 	/*
@@ -125,6 +127,83 @@ void GameplayState::Update(float time_step)
 
 	plane->UpdateDestructions();
 
+	std::uniform_int_distribution<> randomY(
+		(plane->GetStartY() + plane->width * 0.1 ),
+		(plane->GetEndY()));
+
+	int x = randomY(engine->gen);
+	if(leftspawntimer.Passed())
+	{
+		leftspawntimer.AddDelta(1000 + std::rand()%4000);
+		std::string unit="";
+
+		switch(std::rand()%8)
+		{
+			case 0:
+				unit = "fighter";
+				break;
+			case 1:
+				unit = "zombie";
+				break;
+			case 2:
+				unit = "monster";
+				break;
+			case 3:
+				unit = "stickman";
+				break;
+			case 4:
+				unit = "frog";
+				break;
+			case 5:
+				unit = "thief";
+				break;
+			case 6:
+				unit = "knight";
+				break;
+			case 7:
+				unit = "mage";
+				break;
+		}
+
+		units.push_back(new Unit(unit,Course::LEFT,x));
+	}
+
+	if(rightspawntimer.Passed())
+	{
+		rightspawntimer.AddDelta(1000 + std::rand()%4000);
+		std::string unit="";
+
+		switch(std::rand()%8)
+		{
+			case 0:
+				unit = "fighter";
+				break;
+			case 1:
+				unit = "zombie";
+				break;
+			case 2:
+				unit = "monster";
+				break;
+			case 3:
+				unit = "stickman";
+				break;
+			case 4:
+				unit = "frog";
+				break;
+			case 5:
+				unit = "thief";
+				break;
+			case 6:
+				unit = "knight";
+				break;
+			case 7:
+				unit = "mage";
+				break;
+		}
+
+		units.push_back(new Unit(unit,Course::RIGHT,x));
+	}
+
 	if(starttimer < fpscounter.GetTime())
 	{
 		float deltatime = time_step * timemultiplier;
@@ -173,7 +252,7 @@ void GameplayState::Update(float time_step)
 
 			if( (*it)->todelete)
 			{
-				for(auto jt = units.begin(); jt != units.end();jt++)
+				for(auto jt = units.begin(); jt != units.end(); jt++)
 				{
 					if((*jt)->GetTarget() == (*it))
 						(*jt)->ClearTarget();
@@ -283,13 +362,15 @@ void GameplayState::HandleEvents(sf::Event& event)
 		if(randomY(engine->gen)%2 == 0)
 			units.push_back(new Unit("fighter",Course::LEFT,x));
 		else
-			units.push_back(new Unit("stickman",Course::RIGHT,x));
+			units.push_back(new Unit("fighter",Course::RIGHT,x));
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-		units.push_back(new Unit("stickman",Course::LEFT,x));
+		units.push_back(new Unit("fighter",Course::LEFT,x));
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		units.push_back(new Unit("fighter",Course::RIGHT,x));
+
+
 
 	static int pausetimer = 0;
 	if(pausetimer < fpscounter.GetTime() && sf::Keyboard::isKeyPressed(sf::Keyboard::P))

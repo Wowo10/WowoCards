@@ -38,6 +38,9 @@ class GameplayState : public GameState
 
 		Camera camera;
 
+		GameTimer leftspawntimer;
+		GameTimer rightspawntimer;
+
 		std::vector<Player*> players;
 		std::vector<Object*> objects;
 		std::vector<Unit*> units;
